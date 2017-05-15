@@ -1,0 +1,12 @@
+{
+  "development": {
+    "initDb":   "postgres",
+    "database": "quran",
+    "pgConnection": "postgres://postgres@localhost:5432/"
+  },
+  "production": {
+    "initDb":   "",
+    "database": "quran",
+    "pgConnection": ""
+  }
+}

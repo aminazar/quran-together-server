@@ -18,19 +18,22 @@ function sql(file) {
  */
 module.exports = {
   db: {
-    create:   sql('db/create.sql'),
-    drop:     sql('db/drop.sql'),
-    test:     sql('db/test.sql'),
+    create:       sql('db/create.sql'),
+    drop:         sql('db/drop.sql'),
+    test:         sql('db/test.sql'),
   },
   users: {
-    create:   sql('users/create.sql'),
-    drop:     sql('users/drop.sql'),
-    get:      sql('users/get.sql'),
+    create:       sql('users/create.sql'),
+    drop:         sql('users/drop.sql'),
+    getByEmail:   sql('users/getByEmail.sql'),
+    getAllToken:  sql('users/getAllToken.sql'),
+    get:          sql('users/get.sql'),
   },
   user_confirmation: {
-    create:   sql('user_confirmation/create.sql'),
-    drop:     sql('user_confirmation/drop.sql'),
-    get:      sql('user_confirmation/get.sql'),
-    getAll:   sql('user_confirmation/getAll.sql'),
+    create:       sql('user_confirmation/create.sql'),
+    drop:         sql('user_confirmation/drop.sql'),
+    get:          sql('user_confirmation/get.sql'),
+    getAll:       sql('user_confirmation/getAll.sql'),
+    deleteByPhrase:sql('user_confirmation/deleteByPhrase.sql'),
   },
 };

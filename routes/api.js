@@ -53,7 +53,8 @@ router.get('/', function(req, res) {
   res.send('respond with a resource');
 });
 router.put('/user', apiResponse('User', 'insert', false, ['body']));
-router.post('/user/:uid/:email', apiResponse('User', 'sendConfirmationMail', false, ['params.email', 'params.uid']));
+router.post('/user', apiResponse('User', 'confirmation', false, ['body.email']));
 router.post('/auth/:userLink', apiResponse('User', 'confirmRegistration', false, ['params.userLink']));
+router.delete('/auth/:userLink', apiResponse('User', 'deleteAuthLink', false, ['params.userLink']));
 
 module.exports = router;

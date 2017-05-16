@@ -4,7 +4,7 @@
 const env = require("../../env");
 const sql = require('../../sql');
 
-describe("Env",()=> {
+xdescribe("Env",()=> {
   describe("Database", ()=>{
     it("should have 'db' key", ()=>{
       expect(env.db).toBeDefined();

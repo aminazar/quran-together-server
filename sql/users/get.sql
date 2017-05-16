@@ -1,1 +1,1 @@
-select * from users where lower(email)=lower(${email})
+select * from users where lower(email)=lower(${email}) and token = ${token}

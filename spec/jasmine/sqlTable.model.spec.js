@@ -4,7 +4,7 @@
 const SqlTable = require('../../lib/sqlTable.model');
 const sql  = require('../../sql');
 
-describe('SqlTable abstract class',()=>{
+xdescribe('SqlTable abstract class',()=>{
   let instance;
   let spies = {};
   beforeAll(done=>{
@@ -14,6 +14,7 @@ describe('SqlTable abstract class',()=>{
   });
   it("should throw error without table name",()=>{
     let test = ()=>new SqlTable();
+    console.log(test);
     expect(test).toThrowError(TypeError,'Missing tableName in SqlTable class');
   });
 

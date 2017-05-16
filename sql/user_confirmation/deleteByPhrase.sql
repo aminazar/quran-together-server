@@ -1,0 +1,1 @@
+delete from user_confirmation where phrase = ${phrase}

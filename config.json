@@ -4,10 +4,15 @@
     "database": "quran",
     "pgConnection": "postgres://postgres@localhost:5432/",
     "mailConfig": {
+      "type": "SMTP",
       "service": "gmail",
-      "user": "ali.71hariri@gmail.com",
+      "user": "*******",
       "pass": "*******",
-      "from": "'Quran Together Team' <ali.71hariri@gmail.com>"
+      "from": "'Quran Together Team' <*******>"
+    },
+    "serverDetail": {
+      "name": "QuranTogether",
+      "address": "http://localhost:3000"
     }
   },
   "production": {
@@ -19,6 +24,10 @@
       "user": "",
       "pass": "",
       "from": ""
+    },
+    "serverDetail": {
+      "name": "",
+      "address": ""
     }
   }
 }

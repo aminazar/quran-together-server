@@ -64,7 +64,8 @@ describe("Test 'User' model", () => {
   it("should get token", (done) => {
     user.confirmRegistration(hashLink)
       .then((res) => {
-        token = res;
+        token = res.token;
+        email = res.email;
         expect(true).toBe(true);
         done();
       })
@@ -75,7 +76,7 @@ describe("Test 'User' model", () => {
   });
 
   it("should delete a hashLink", (done) => {
-    user.deleteAuthLink(hashLink)
+    user.deleteAuthLink(email)
       .then((res) => {
         return sql.test.user_confirmation.getAll();
       })
@@ -108,9 +109,8 @@ describe("Test 'User' model", () => {
   it("should get a token (be same as first token)", (done) => {
     user.confirmRegistration(hashLink)
       .then((res) => {
-        console.log('RES: ' + res);
-        console.log('TOKEN: ' + token);
-        expect(res).toBe(token);
+        expect(res.token).toBe(token);
+        expect(res.email).toBe(email);
         done();
       })
       .catch((err) => {

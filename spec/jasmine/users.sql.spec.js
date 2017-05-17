@@ -4,7 +4,7 @@
 const env = require("../../env");
 const sql = require('../../sql');
 
-xdescribe("Test 'users' table",()=>{
+describe("Test 'users' table",()=>{
   let uid;
   beforeAll(done=>{
     sql.test.users.create()
@@ -36,7 +36,7 @@ xdescribe("Test 'users' table",()=>{
 
   it("should get the row in table", done=>{
     if(uid){
-      sql.test.users.get({email: 'test@ts.com'})
+      sql.test.users.getByEmail({email: 'test@ts.com'})
         .then(res=>{
           expect(res[0].uid).toBe(uid);
           done();
@@ -64,7 +64,7 @@ xdescribe("Test 'users' table",()=>{
 
   it("should get the row in table", done=>{
     if(uid){
-      sql.test.users.get({email: 'ts@ts.com'})
+      sql.test.users.getByEmail({email: 'ts@ts.com'})
         .then(res=>{
           expect(res[0].uid).toBe(uid);
           done();

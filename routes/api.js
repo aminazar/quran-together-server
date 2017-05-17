@@ -53,8 +53,9 @@ router.get('/', function(req, res) {
   res.send('respond with a resource');
 });
 router.put('/user', apiResponse('User', 'insert', false, ['body']));
-router.post('/user', apiResponse('User', 'confirmation', false, ['body.email']));
-router.post('/auth/:userLink', apiResponse('User', 'confirmRegistration', false, ['params.userLink']));
-router.delete('/auth/:userLink', apiResponse('User', 'deleteAuthLink', false, ['params.userLink']));
+router.post('/user/confirm', apiResponse('User', 'confirmation', false, ['body.email']));
+router.post('/user/exist', apiResponse('User', 'userExistence', false, ['body.email']));
+router.get('/auth/:userLink', apiResponse('User', 'confirmRegistration', false, ['params.userLink']));
+router.delete('/auth', apiResponse('User', 'deleteAuthLink', false, ['body.email']));
 
 module.exports = router;

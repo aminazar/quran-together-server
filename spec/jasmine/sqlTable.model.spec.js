@@ -4,7 +4,7 @@
 const SqlTable = require('../../lib/sqlTable.model');
 const sql  = require('../../sql');
 
-xdescribe('SqlTable abstract class',()=>{
+describe('SqlTable abstract class',()=>{
   let instance;
   let spies = {};
   beforeAll(done=>{

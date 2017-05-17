@@ -4,7 +4,7 @@
 const env = require("../../env");
 const sql = require('../../sql');
 
-xdescribe("Test 'user_confirmation' table", () => {
+describe("Test 'user_confirmation' table", () => {
   let tSql = sql.test;
   let uid;
   let name = 'Ali Alavi';
@@ -132,8 +132,8 @@ xdescribe("Test 'user_confirmation' table", () => {
       })
   });
 
-  it("should delete a row by auth phrase", (done) => {
-    sql.test.user_confirmation.deleteByPhrase({phrase: another_phrase})
+  it("should delete a row by user email", (done) => {
+    sql.test.user_confirmation.deleteByEmail({email: another_email})
       .then((res) => {
         expect(res).toBeTruthy();
         done();

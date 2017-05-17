@@ -15,6 +15,7 @@ const isProd = env==='production';
 const isDev  = env==='development';
 const config = require('./config.json')[env];
 const mailConfig = config.mailConfig;
+const serverDetail = config.serverDetail;
 const connectionString = config.pgConnection + config.database;
 const test_db_name = config.database + '_test';
 const testConnectionString = config.pgConnection + test_db_name;
@@ -45,6 +46,7 @@ module.exports = {
   app: app,
   config: config,
   mailConfig: mailConfig,
+  serverDetail: serverDetail,
   db: db,
   testDb : testDb,
   initDb: initDb,

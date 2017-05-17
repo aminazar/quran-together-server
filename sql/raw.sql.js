@@ -34,6 +34,6 @@ module.exports = {
     drop:         sql('user_confirmation/drop.sql'),
     get:          sql('user_confirmation/get.sql'),
     getAll:       sql('user_confirmation/getAll.sql'),
-    deleteByPhrase:sql('user_confirmation/deleteByPhrase.sql'),
+    deleteByEmail:sql('user_confirmation/deleteByEmail.sql'),
   },
 };

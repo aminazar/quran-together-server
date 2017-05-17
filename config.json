@@ -1,0 +1,33 @@
+{
+  "development": {
+    "initDb":   "postgres",
+    "database": "quran",
+    "pgConnection": "postgres://postgres@localhost:5432/",
+    "mailConfig": {
+      "type": "SMTP",
+      "service": "gmail",
+      "user": "*******",
+      "pass": "*******",
+      "from": "'Quran Together Team' <*******>"
+    },
+    "serverDetail": {
+      "name": "QuranTogether",
+      "address": "http://localhost:3000"
+    }
+  },
+  "production": {
+    "initDb":   "",
+    "database": "quran",
+    "pgConnection": "",
+    "mailConfig": {
+      "service": "",
+      "user": "",
+      "pass": "",
+      "from": ""
+    },
+    "serverDetail": {
+      "name": "",
+      "address": ""
+    }
+  }
+}

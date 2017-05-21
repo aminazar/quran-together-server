@@ -12,7 +12,7 @@ var lib = require('./lib');
 
 var app = express();
 
-var userMap = new Map();
+app.locals.userMap = new Map();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,13 +36,14 @@ app.use(function (req, res, next) {
     next();
   }
   else{
-    let user = userMap.get(email);
+    let user = app.locals.userMap.get(email);
 
     //Check user from map
     if(user !== undefined){
       //The user is on map
       if(user.token !== token){
-        res.status(403);
+        res.status(403)
+          .send('The username or token doest not acceptable');
       }
       else{
         req.user = user;
@@ -60,13 +61,14 @@ app.use(function (req, res, next) {
             name: res[0].name,
             token: res[0].token
           };
-          userMap.set(email, user);
+          app.locals.userMap.set(email, user);
 
           req.user = user;
           next();
         })
         .catch((err) => {
-          res.status(404);
+          res.status(404)
+            .send('User not found');
         });
     }
   }

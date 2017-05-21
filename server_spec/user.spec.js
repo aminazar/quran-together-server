@@ -101,7 +101,7 @@ describe("User API", () => {
       }
       done();
     })
-  });
+  }, 20000);
 
   it("another_user should able to register", (done) => {
     request.put({

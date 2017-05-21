@@ -6,9 +6,9 @@
     "mailConfig": {
       "type": "SMTP",
       "service": "gmail",
-      "user": "*******",
-      "pass": "*******",
-      "from": "'Quran Together Team' <*******>"
+      "user": "ali.hariri1400@gmail.com",
+      "pass": "1$kamtar",
+      "from": "'Quran Together Team' <ali.hariri1400@gmail.com>"
     },
     "serverDetail": {
       "name": "QuranTogether",

@@ -101,7 +101,7 @@ describe("User API", () => {
       }
       done();
     })
-  }, 20000);
+  });
 
   it("another_user should able to register", (done) => {
     request.put({
@@ -190,6 +190,18 @@ describe("User API", () => {
       if(resExpect(res, 200)){
         let data = JSON.parse(res.body);
         expect(data.exist).toBe(false);
+      }
+      done();
+    })
+  });
+
+  it("should get access defined error", (done) => {
+    request.delete({
+      url: base_url + 'auth' + test_query,
+      form: {email: userEmail}
+    }, (err, res) => {
+      if(resExpect(res, 403)){
+        expect(true).toBe(true);
       }
       done();
     })

@@ -4,7 +4,7 @@ const router = express.Router();
 const moment = require('moment');
 
 /* GET api listing. */
-function apiResponse(className, functionName, adminOnly=false, reqFuncs=[]){
+function apiResponse(className, functionName, tokenNeeded=true, reqFuncs=[]){
   let args = Array.prototype.slice.call(arguments, 4);
   let deepFind = function(obj, pathStr){
     let path = pathStr.split('.');
@@ -20,11 +20,11 @@ function apiResponse(className, functionName, adminOnly=false, reqFuncs=[]){
     return obj;
   };
   return(function(req, res) {
-    let user = req.user ? req.user.username : req.user;
+    // let user = req.user ? req.user.email : req.user;
     req.test = lib.helpers.isTestReq(req);
-    if(adminOnly && !lib.helpers.adminCheck(user)) {
+    if(tokenNeeded && (req.user === null)) {
       res.status(403)
-        .send('Only admin can do this.');
+        .send('Token not found');
     }
     else {
       let dynamicArgs = [];
@@ -56,6 +56,6 @@ router.put('/user', apiResponse('User', 'insert', false, ['body']));
 router.post('/user/confirm', apiResponse('User', 'confirmation', false, ['body.email']));
 router.post('/user/exist', apiResponse('User', 'userExistence', false, ['body.email']));
 router.get('/auth/:userLink', apiResponse('User', 'confirmRegistration', false, ['params.userLink']));
-router.delete('/auth', apiResponse('User', 'deleteAuthLink', false, ['body.email']));
+router.delete('/auth', apiResponse('User', 'deleteAuthLink', true, ['body.email']));
 
 module.exports = router;

@@ -46,6 +46,7 @@ app.use(function (req, res, next) {
           .send('The username or token doest not acceptable');
       }
       else{
+        user.timeOut = 600000;
         req.user = user;
         next();
       }
@@ -59,7 +60,11 @@ app.use(function (req, res, next) {
           user = {
             email: res[0].email,
             name: res[0].name,
-            token: res[0].token
+            token: res[0].token,
+            timeOut: 600000,
+            destroy: setTimeout(function(){
+              app.locals.userMap.delete(email);
+            }, this.timeOut)
           };
           app.locals.userMap.set(email, user);
 

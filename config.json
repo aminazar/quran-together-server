@@ -6,13 +6,13 @@
     "mailConfig": {
       "type": "SMTP",
       "service": "gmail",
-      "user": "*******",
-      "pass": "*******",
-      "from": "'Quran Together Team' <*******>"
+      "user": "ali.hariri1400@gmail.com",
+      "pass": "1$kamtar",
+      "from": "'Quran Together Team' <ali.hariri1400@gmail.com>"
     },
     "serverDetail": {
       "name": "QuranTogether",
-      "address": "http://localhost:3000"
+      "address": "http://192.168.1.5:3000"
     }
   },
   "production": {

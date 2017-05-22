@@ -58,4 +58,7 @@ router.post('/user/exist', apiResponse('User', 'userExistence', false, ['body.em
 router.get('/auth/:userLink', apiResponse('User', 'confirmRegistration', false, ['params.userLink']));
 router.delete('/auth', apiResponse('User', 'deleteAuthLink', true, ['body.email']));
 
+//Temp API (for dev mode)
+router.put('/user/temp', apiResponse('User', 'tempInsert', false, ['body']));
+
 module.exports = router;

@@ -7,8 +7,12 @@ var bodyParser = require('body-parser');
 
 var api = require('./routes/api');
 var index = require('./routes/index');
+var sql = require('./sql');
+var lib = require('./lib');
 
 var app = express();
+
+app.locals.userMap = new Map();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,6 +25,59 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//Authentication handler
+app.use(function (req, res, next) {
+  let email = req.body.email;
+  let token = req.body.token;
+
+  if((email === undefined || token === undefined) || (email === null || token === null)){
+    req.user = null;
+    next();
+  }
+  else{
+    let user = app.locals.userMap.get(email);
+
+    //Check user from map
+    if(user !== undefined){
+      //The user is on map
+      if(user.token !== token){
+        res.status(403)
+          .send('The username or token doest not acceptable');
+      }
+      else{
+        user.timeOut = 600000;
+        req.user = user;
+        next();
+      }
+    }
+    else{
+      //Should load user from database
+      let curSql = lib.helpers.isTestReq(req) ? sql.test : sql;
+
+      curSql.users.get({email: email, token: token})
+        .then((res) => {
+          user = {
+            email: res[0].email,
+            name: res[0].name,
+            token: res[0].token,
+            timeOut: 600000,
+            destroy: setTimeout(function(){
+              app.locals.userMap.delete(email);
+            }, this.timeOut)
+          };
+          app.locals.userMap.set(email, user);
+
+          req.user = user;
+          next();
+        })
+        .catch((err) => {
+          res.status(404)
+            .send('User not found');
+        });
+    }
+  }
+});
 
 app.use('/', index);
 app.use('/api', api);

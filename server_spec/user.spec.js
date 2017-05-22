@@ -94,7 +94,7 @@ describe("User API", () => {
   it("hashLink should delete", (done) => {
     request.delete({
       url: base_url + 'auth' + test_query,
-      form: {email: userEmail}
+      form: {email: userEmail, token: userToken}
     }, (err, res) => {
       if(resExpect(res, 200)){
         expect(true).toBe(true);
@@ -190,6 +190,18 @@ describe("User API", () => {
       if(resExpect(res, 200)){
         let data = JSON.parse(res.body);
         expect(data.exist).toBe(false);
+      }
+      done();
+    })
+  });
+
+  it("should get access defined error", (done) => {
+    request.delete({
+      url: base_url + 'auth' + test_query,
+      form: {email: userEmail}
+    }, (err, res) => {
+      if(resExpect(res, 403)){
+        expect(true).toBe(true);
       }
       done();
     })

@@ -139,9 +139,9 @@ describe("User API", () => {
   });
 
   it("registered another_user should get token (like login in another device)" ,(done) => {
-    request.post({
-      url: base_url + 'user/confirm' + test_query,
-      form: {email: another_userEmail}
+    request.put({
+      url: base_url + 'user' + test_query,
+      form: {email: another_userEmail, name: 'Reza'}
     }, (err, res) => {
       if(resExpect(res, 200)){
 

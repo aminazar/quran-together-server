@@ -14,7 +14,7 @@ describe("Test 'user_confirmation' table", () => {
   let another_name = 'Taghi Taghavi';
   let another_email = 't.taghavi@gmail.com';
   let another_token = 'qpwoeirutyalskdjfhgzmxncbv0987654321zxcvbnmkljhgfd';
-  let another_phrase = '0987654321qazxcvbnmklpoiuytrew';
+  let another_phrase = '987654';
 
   beforeAll((done) => {
     sql.test.users.create()
@@ -49,7 +49,7 @@ describe("Test 'user_confirmation' table", () => {
   it("should add a row to the table", (done) => {
     sql.test.user_confirmation.add({
       uid: uid,
-      phrase: 'qazxcvbnmklpoiuytrew0987654321'
+      phrase: '012345'
     })
       .then((data) => {
         expect(typeof data.uid).toBe('number');
@@ -107,7 +107,7 @@ describe("Test 'user_confirmation' table", () => {
   });
 
   it("should update a row by user id", (done) => {
-    sql.test.user_confirmation.update({phrase: '101010101010101010101010101010'}, uid)
+    sql.test.user_confirmation.update({phrase: '010203'}, uid)
       .then((res) => {
         expect(res).toBeTruthy();
         done();
@@ -119,7 +119,7 @@ describe("Test 'user_confirmation' table", () => {
   });
 
   it("should fetch user_confirmation and users joined table for specific phrase", (done) => {
-    sql.test.user_confirmation.get({phrase: '101010101010101010101010101010'})
+    sql.test.user_confirmation.get({phrase: '010203'})
       .then((res) => {
         expect(res.length).toBe(1);
         expect(res[0].uid).toBe(uid);

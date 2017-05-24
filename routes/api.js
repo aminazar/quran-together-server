@@ -52,13 +52,9 @@ function apiResponse(className, functionName, tokenNeeded=true, reqFuncs=[]){
 router.get('/', function(req, res) {
   res.send('respond with a resource');
 });
-router.put('/user', apiResponse('User', 'insert', false, ['body']));
-router.post('/user/confirm', apiResponse('User', 'confirmation', false, ['body.email']));
+router.put('/user', apiResponse('User', 'confirmation', false, ['body', 'body.email']));
 router.post('/user/exist', apiResponse('User', 'userExistence', false, ['body.email']));
-router.get('/auth/:userLink', apiResponse('User', 'confirmRegistration', false, ['params.userLink']));
-router.delete('/auth', apiResponse('User', 'deleteAuthLink', true, ['body.email']));
-
-//Temp API (for dev mode)
-router.put('/user/temp', apiResponse('User', 'tempInsert', false, ['body']));
+router.post('/user/auth', apiResponse('User', 'confirmRegistration', false, ['body.email', 'body.code']));
+router.delete('/user/auth', apiResponse('User', 'deleteAuthLink', true, ['body.email', 'body.token']));
 
 module.exports = router;

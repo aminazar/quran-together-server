@@ -74,8 +74,9 @@ describe("User API", () => {
   it("user should able to confirm the registration", (done) => {
     sql.test.user_confirmation.getAll()
       .then((res) => {
-        request.get({
-          url: base_url + 'auth/' + res[0].phrase + test_query
+        request.post({
+          url: base_url + 'user/auth' + test_query,
+          form: {email: 'ali.71hariri@gmail.com', code: res[0].phrase}
         }, (err, res) => {
           if(err)
             console.log(err.message);
@@ -93,7 +94,7 @@ describe("User API", () => {
 
   it("hashLink should delete", (done) => {
     request.delete({
-      url: base_url + 'auth' + test_query,
+      url: base_url + 'user/auth' + test_query,
       form: {email: userEmail, token: userToken}
     }, (err, res) => {
       if(resExpect(res, 200)){
@@ -119,8 +120,9 @@ describe("User API", () => {
   it("another_user should able to confirm the registration", (done) => {
     sql.test.user_confirmation.getAll()
       .then((res) => {
-        request.get({
-          url: base_url + 'auth/' + res[0].phrase + test_query
+        request.post({
+          url: base_url + 'user/auth/' + test_query,
+          form: {email: 'alireza.3h1993@yahoo.com', code: res[0].phrase}
         }, (err, res) => {
           if(err)
             console.log(err.message);
@@ -137,9 +139,9 @@ describe("User API", () => {
   });
 
   it("registered another_user should get token (like login in another device)" ,(done) => {
-    request.post({
-      url: base_url + 'user/confirm' + test_query,
-      form: {email: another_userEmail}
+    request.put({
+      url: base_url + 'user' + test_query,
+      form: {email: another_userEmail, name: 'Reza'}
     }, (err, res) => {
       if(resExpect(res, 200)){
 
@@ -197,7 +199,7 @@ describe("User API", () => {
 
   it("should get access defined error", (done) => {
     request.delete({
-      url: base_url + 'auth' + test_query,
+      url: base_url + 'user/auth' + test_query,
       form: {email: userEmail}
     }, (err, res) => {
       if(resExpect(res, 403)){

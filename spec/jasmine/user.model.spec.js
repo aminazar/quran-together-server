@@ -62,7 +62,7 @@ describe("Test 'User' model", () => {
   });
 
   it("should get token", (done) => {
-    user.confirmRegistration(hashLink)
+    user.confirmRegistration(email, hashLink)
       .then((res) => {
         token = res.token;
         email = res.email;
@@ -91,7 +91,7 @@ describe("Test 'User' model", () => {
   });
 
   it("should generate hashLink", (done) => {
-    user.generateHashLink(uid)
+    user.generateVerificationCode(uid)
       .then((res) => {
         return sql.test.user_confirmation.getAll();
       })
@@ -107,7 +107,7 @@ describe("Test 'User' model", () => {
   });
 
   it("should get a token (be same as first token)", (done) => {
-    user.confirmRegistration(hashLink)
+    user.confirmRegistration(email, hashLink)
       .then((res) => {
         expect(res.token).toBe(token);
         expect(res.email).toBe(email);

@@ -17,8 +17,8 @@
   },
   "production": {
     "initDb":   "",
-    "database": "quran",
-    "pgConnection": "",
+    "database": "",
+    "pgConnection": "postgres://byemwhwriasncz:31fe018677b535d7fb1a14ed7c227d2399a31e28ac60ef09acf7db80e8eec544@ec2-54-247-99-159.eu-west-1.compute.amazonaws.com:5432/d343g1d9iv5f6l",
     "mailConfig": {
       "service": "",
       "user": "",

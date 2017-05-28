@@ -43,7 +43,7 @@ function apiResponse(className, functionName, tokenNeeded=true, reqFuncs=[]){
         })
         .catch(err=> {
           console.log(`${className}/${functionName}: `, err.message);
-          res.status(err.status||500)
+          res.status(err.number||500)
             .send(err.message || err);
         });
     }

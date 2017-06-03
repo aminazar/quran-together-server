@@ -81,7 +81,7 @@ let tablesWithSqlCreatedByHelpers = [
   {
     name: 'khatms',
     insert: true,
-    update: false,
+    update: true,
     select: true,
     delete: true,
     idColumn: 'khid',

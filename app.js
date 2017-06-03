@@ -26,14 +26,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Enable cross origin to be able communication with browser (Please comment blow code in production)
-app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT ,DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-  next();
-});
-
 //Authentication handler
 app.use(function (req, res, next) {
   let email = req.body.email;
@@ -54,7 +46,9 @@ app.use(function (req, res, next) {
           .send('The username or token doest not acceptable');
       }
       else{
-        user.timeOut = 600000;
+        user.destroy = setTimeout(function(){
+          app.locals.userMap.delete(email);
+        }, user.timeOut);
         req.user = user;
         next();
       }
@@ -66,14 +60,16 @@ app.use(function (req, res, next) {
       curSql.users.get({email: email, token: token})
         .then((res) => {
           user = {
+            uid: res[0].uid,
             email: res[0].email,
             name: res[0].name,
             token: res[0].token,
-            timeOut: 600000,
-            destroy: setTimeout(function(){
-              app.locals.userMap.delete(email);
-            }, this.timeOut)
+            timeOut: 600000
           };
+          user.destroy = setTimeout(function(){
+            app.locals.userMap.delete(email);
+          }, user.timeOut);
+
           app.locals.userMap.set(email, user);
 
           req.user = user;

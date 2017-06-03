@@ -122,8 +122,7 @@ describe("Test 'khatms' table", () => {
   });
 
   it("should update (first) khatm (For user A)", done => {
-    sql.test.khatms.updateByEmail({
-      email: 'a@ts.com',
+    sql.test.khatms.update({
       name: 'first good khatm',
       description: 'Khatm for pray',
       creator_shown: false,
@@ -132,7 +131,7 @@ describe("Test 'khatms' table", () => {
       timezone: 'UTC+3:30',
       specific_sura: 2,
       repeats: 10
-    })
+    }, A_kid)
       .then((res) => {
         expect(true).toBe(true);
         done();

@@ -40,6 +40,5 @@ module.exports = {
     create:       sql('khatms/create.sql'),
     drop:         sql('khatms/drop.sql'),
     getByEmail:   sql('khatms/getByEmail.sql'),
-    updateByEmail:sql('khatms/updateByEmail.sql'),
   },
 };

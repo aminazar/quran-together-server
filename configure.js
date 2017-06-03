@@ -37,6 +37,9 @@ function prodTablesCreate() {
       .then(() => {
         return createOrExist('user_confirmation');
       }) //Add new tables in order of dependency in promise chain
+      .then(() => {
+        return createOrExist('khatms');
+      })
       .then(() => resolve())
       .catch((err) => {
         reject(err);

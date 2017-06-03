@@ -36,4 +36,10 @@ module.exports = {
     getAll:       sql('user_confirmation/getAll.sql'),
     deleteByEmail:sql('user_confirmation/deleteByEmail.sql'),
   },
+  khatms: {
+    create:       sql('khatms/create.sql'),
+    drop:         sql('khatms/drop.sql'),
+    getByEmail:   sql('khatms/getByEmail.sql'),
+    updateByEmail:sql('khatms/updateByEmail.sql'),
+  },
 };

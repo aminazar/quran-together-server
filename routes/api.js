@@ -22,7 +22,8 @@ function apiResponse(className, functionName, tokenNeeded=true, reqFuncs=[]){
   return(function(req, res) {
     // let user = req.user ? req.user.email : req.user;
     req.test = lib.helpers.isTestReq(req);
-    if(tokenNeeded && (req.user === null)) {
+    // console.log('USER: ' + req.user);
+    if(tokenNeeded && (req.user === null || req.user === undefined)) {
       res.status(403)
         .send('Token not found');
     }
@@ -42,7 +43,7 @@ function apiResponse(className, functionName, tokenNeeded=true, reqFuncs=[]){
         })
         .catch(err=> {
           console.log(`${className}/${functionName}: `, err.message);
-          res.status(err.status||500)
+          res.status(err.number||500)
             .send(err.message || err);
         });
     }
@@ -55,6 +56,6 @@ router.get('/', function(req, res) {
 router.put('/user', apiResponse('User', 'confirmation', false, ['body', 'body.email']));
 router.post('/user/exist', apiResponse('User', 'userExistence', false, ['body.email']));
 router.post('/user/auth', apiResponse('User', 'confirmRegistration', false, ['body.email', 'body.code']));
-router.delete('/user/auth', apiResponse('User', 'deleteAuthLink', true, ['body.email', 'body.token']));
+router.post('/user/auth/delete', apiResponse('User', 'deleteAuthLink', true, ['body.email', 'body.token']));
 
 module.exports = router;

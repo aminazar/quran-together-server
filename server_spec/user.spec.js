@@ -93,8 +93,8 @@ describe("User API", () => {
   });
 
   it("hashLink should delete", (done) => {
-    request.delete({
-      url: base_url + 'user/auth' + test_query,
+    request.post({
+      url: base_url + 'user/auth/delete' + test_query,
       form: {email: userEmail, token: userToken}
     }, (err, res) => {
       if(resExpect(res, 200)){
@@ -198,8 +198,8 @@ describe("User API", () => {
   });
 
   it("should get access defined error", (done) => {
-    request.delete({
-      url: base_url + 'user/auth' + test_query,
+    request.post({
+      url: base_url + 'user/auth/delete' + test_query,
       form: {email: userEmail}
     }, (err, res) => {
       if(resExpect(res, 403)){

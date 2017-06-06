@@ -28,8 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Authentication handler
 app.use(function (req, res, next) {
-  let email = req.body.email;
-  let token = req.body.token;
+  let email = req.headers.email;
+  let token = req.headers.token;
 
   if((email === undefined || token === undefined) || (email === null || token === null)){
     req.user = null;
@@ -46,7 +46,9 @@ app.use(function (req, res, next) {
           .send('The username or token doest not acceptable');
       }
       else{
-        user.timeOut = 600000;
+        user.destroy = setTimeout(function(){
+          app.locals.userMap.delete(email);
+        }, user.timeOut);
         req.user = user;
         next();
       }
@@ -58,14 +60,16 @@ app.use(function (req, res, next) {
       curSql.users.get({email: email, token: token})
         .then((res) => {
           user = {
+            uid: res[0].uid,
             email: res[0].email,
             name: res[0].name,
             token: res[0].token,
-            timeOut: 600000,
-            destroy: setTimeout(function(){
-              app.locals.userMap.delete(email);
-            }, this.timeOut)
+            timeOut: 600000
           };
+          user.destroy = setTimeout(function(){
+            app.locals.userMap.delete(email);
+          }, user.timeOut);
+
           app.locals.userMap.set(email, user);
 
           req.user = user;

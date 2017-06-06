@@ -36,4 +36,16 @@ module.exports = {
     getAll:       sql('user_confirmation/getAll.sql'),
     deleteByEmail:sql('user_confirmation/deleteByEmail.sql'),
   },
+  khatms: {
+    create:       sql('khatms/create.sql'),
+    drop:         sql('khatms/drop.sql'),
+    getByEmail:   sql('khatms/getByEmail.sql'),
+  },
+  commitments: {
+    create:       sql('commitments/create.sql'),
+    drop:         sql('commitments/drop.sql'),
+    getByKhatm:   sql('commitments/getByKhatm.sql'),
+    getByUser:    sql('commitments/getByUser.sql'),
+    init:         sql('commitments/init.sql'),
+  },
 };

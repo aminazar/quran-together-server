@@ -50,12 +50,18 @@ function apiResponse(className, functionName, tokenNeeded=true, reqFuncs=[]){
   });
 }
 
+//User API
 router.get('/', function(req, res) {
   res.send('respond with a resource');
 });
 router.put('/user', apiResponse('User', 'confirmation', false, ['body', 'body.email']));
 router.post('/user/exist', apiResponse('User', 'userExistence', false, ['body.email']));
 router.post('/user/auth', apiResponse('User', 'confirmRegistration', false, ['body.email', 'body.code']));
-router.post('/user/auth/delete', apiResponse('User', 'deleteAuthLink', true, ['body.email', 'body.token']));
+router.delete('/user/auth', apiResponse('User', 'deleteAuthLink', true, ['user.email', 'user.token']));
 
+
+//Khatm API
+router.put('/khatm', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body']));
+router.post('/khatm/:khid', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body', 'params.khid']));
+router.get('/khatm', apiResponse('Khatm', 'selectAllKhatms', true, ['user.email']));
 module.exports = router;

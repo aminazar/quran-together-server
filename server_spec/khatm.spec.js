@@ -42,6 +42,7 @@ describe("Khatm API", () => {
     if(!isSetup){
       sql.test.users.create()
         .then(() => sql.test.khatms.create())
+        .then(() => sql.test.commitments.create())
         .then(() => sql.test.users.add({
           email: 'a@ts.com',
           name: 'Ali Alavi',
@@ -154,10 +155,10 @@ describe("Khatm API", () => {
       if(resExpect(res, 200)) {
         let data = JSON.parse(res.body);
         expect(data.length).toBe(2);
-        expect(data[0].name).toBe('first khatm');
-        expect(data[0].repeats).toBe(2);
+        expect(data[0].name).toBe('second khatm');
+        expect(data[0].repeats).toBe(1);
         expect(data[0].description).toBe(null);
-        expect(data[0].specific_sura).toBe(null);
+        expect(data[0].specific_sura).toBe(2);
       }
 
       done();
@@ -202,10 +203,10 @@ describe("Khatm API", () => {
       if(resExpect(res, 200)) {
         let data = JSON.parse(res.body);
         expect(data.length).toBe(2);
-        expect(data[1].name).toBe('first khatm');
-        expect(data[1].repeats).toBe(2);
-        expect(data[1].description).toBe('new DSCP');
-        expect(data[1].specific_sura).toBe(null);
+        expect(data[0].name).toBe('first khatm');
+        expect(data[0].repeats).toBe(2);
+        expect(data[0].description).toBe('new DSCP');
+        expect(data[0].specific_sura).toBe(null);
       }
 
       done();
@@ -241,7 +242,8 @@ describe("Khatm API", () => {
 
   afterEach(done => {
     if(tearDown){
-      sql.test.khatms.drop()
+      sql.test.commitments.drop()
+        .then(() => sql.test.khatms.drop())
         .then((res) =>  sql.test.users.drop())
         .then(() => done())
         .catch((err) => {

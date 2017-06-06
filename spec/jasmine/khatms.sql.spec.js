@@ -11,6 +11,7 @@ describe("Test 'khatms' table", () => {
   beforeAll(done => {
     sql.test.users.create()
       .then(() => sql.test.khatms.create())
+      .then(() => sql.test.commitments.create())
       .then(() => sql.test.users.add({
         email: 'a@ts.com',
         name: 'Ali Alavi',
@@ -187,7 +188,8 @@ describe("Test 'khatms' table", () => {
   });
 
   afterAll(done => {
-    sql.test.khatms.drop()
+    sql.test.commitments.drop()
+      .then(() => sql.test.khatms.drop())
       .then(() => sql.test.users.drop())
       .then(() => done())
       .catch(err => {

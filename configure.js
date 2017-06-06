@@ -40,6 +40,9 @@ function prodTablesCreate() {
       .then(() => {
         return createOrExist('khatms');
       })
+      .then(() => {
+        return createOrExist('commitments');
+      })
       .then(() => resolve())
       .catch((err) => {
         reject(err);

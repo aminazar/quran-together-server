@@ -93,11 +93,13 @@ describe("User API", () => {
   });
 
   it("hashLink should delete", (done) => {
+
     request.delete({
       headers: {
         email: userEmail, token: userToken
       },
       url: base_url + 'user/auth' + test_query
+
     }, (err, res) => {
       if(resExpect(res, 200)){
         expect(true).toBe(true);

@@ -59,6 +59,7 @@ router.post('/user/exist', apiResponse('User', 'userExistence', false, ['body.em
 router.post('/user/auth', apiResponse('User', 'confirmRegistration', false, ['body.email', 'body.code']));
 router.delete('/user/auth', apiResponse('User', 'deleteAuthLink', true, ['user.email', 'user.token']));
 
+
 //Khatm API
 router.put('/khatm', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body']));
 router.post('/khatm/:khid', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body', 'params.khid']));

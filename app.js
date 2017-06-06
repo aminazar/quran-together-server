@@ -28,8 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Authentication handler
 app.use(function (req, res, next) {
-  let email = req.body.email;
-  let token = req.body.token;
+  let email = req.headers.email;
+  let token = req.headers.token;
 
   if((email === undefined || token === undefined) || (email === null || token === null)){
     req.user = null;

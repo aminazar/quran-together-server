@@ -72,10 +72,9 @@ describe("Khatm API", () => {
 
   it("should A user add new khatm", done => {
     request.put({
+      headers: {email: 'a@ts.com', token: '1234567890qazwsx'},
       url: base_url + 'khatm' + test_query,
       form: {
-        email: 'a@ts.com',
-        token: '1234567890qazwsx',
         name: 'first khatm',
         creator_shown: false,
         start_date: new Date(2017, 4, 30),
@@ -97,10 +96,9 @@ describe("Khatm API", () => {
 
   it("should A user add another khatm", done => {
     request.put({
+      headers: {email: 'a@ts.com', token: '1234567890qazwsx'},
       url: base_url + 'khatm' + test_query,
       form: {
-        email: 'a@ts.com',
-        token: '1234567890qazwsx',
         name: 'second khatm',
         creator_shown: true,
         start_date: new Date(2017, 4, 30),
@@ -124,10 +122,9 @@ describe("Khatm API", () => {
 
   it("should B user add new khatm", done => {
     request.put({
+      headers: {email: 'b@ts.com', token: '0987654321qazwsx'},
       url: base_url + 'khatm' + test_query,
       form: {
-        email: 'b@ts.com',
-        token: '0987654321qazwsx',
         name: 'For God',
         creator_shown: true,
         description: 'In the Ramezan month',
@@ -145,9 +142,9 @@ describe("Khatm API", () => {
   });
 
   it("should A user get all khatms", done => {
-    request.post({
-      url: base_url + 'khatm/get/all' + test_query,
-      form: {email: 'a@ts.com', token: '1234567890qazwsx'}
+    request.get({
+      headers: {email: 'a@ts.com', token: '1234567890qazwsx'},
+      url: base_url + 'khatm' + test_query
     }, (err, res) => {
       if(err)
         fail(err.message);
@@ -167,10 +164,9 @@ describe("Khatm API", () => {
 
   it("should A user update first khatm details", done => {
     request.post({
+      headers: {email: 'a@ts.com', token: '1234567890qazwsx'},
       url: base_url + 'khatm/' + A_khid0 + test_query,
       form: {
-        email: 'a@ts.com',
-        token: '1234567890qazwsx',
         name: 'first khatm',
         description: 'new DSCP',
         creator_shown: false,
@@ -193,9 +189,9 @@ describe("Khatm API", () => {
   });
 
   it("should A user get all kahtms (again)", done => {
-    request.post({
-      url: base_url + 'khatm/get/all' + test_query,
-      form: {email: 'a@ts.com', token: '1234567890qazwsx'}
+    request.get({
+      headers: {email: 'a@ts.com', token: '1234567890qazwsx'},
+      url: base_url + 'khatm' + test_query
     }, (err, res) => {
       if(err)
         fail(err.message);
@@ -214,9 +210,9 @@ describe("Khatm API", () => {
   });
 
   it("should B user get all khatms", done => {
-    request.post({
-      url: base_url + 'khatm/get/all' + test_query,
-      form: {email: 'b@ts.com', token: '0987654321qazwsx'}
+    request.get({
+      headers: {email: 'b@ts.com', token: '0987654321qazwsx'},
+      url: base_url + 'khatm' + test_query
     }, (err, res) => {
       if(err)
         fail(err.message);

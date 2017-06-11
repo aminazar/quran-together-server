@@ -13,10 +13,6 @@
       },
       "from": "Quran Together <no-reply@mail.quran.parts>"
     },
-    "serverDetail": {
-      "name": "QuranTogether",
-      "address": "http://192.168.1.10:3000"
-    }
   },
   "production": {
     "initDb":   "",
@@ -32,9 +28,5 @@
       },
       "from": "Quran Together <no-reply@mail.quran.parts>"
     },
-    "serverDetail": {
-      "name": "QuranTogether",
-      "address": "http://quran-together.herokuapp.com"
-    }
   }
 }

@@ -8,5 +8,6 @@ CREATE TABLE khatms(
     end_date date,
     timezone varchar(10) not null,
     specific_sura smallint,
-    repeats smallint default 1
+    repeats smallint default 1,
+    share_link varchar(255) unique
 )

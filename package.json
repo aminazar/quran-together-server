@@ -9,6 +9,7 @@
     "postinstall": "node configure.js"
   },
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.4.7",
     "body-parser": "~1.15.1",
@@ -20,11 +21,11 @@
     "moment": "^2.18.1",
     "morgan": "~1.7.0",
     "nodemailer": "^4.0.1",
+    "pg-monitor": "^0.7.1",
     "pg-promise": "^5.7.1",
     "randomstring": "^1.1.5",
     "request": "^2.79.0",
-    "serve-favicon": "~2.3.0",
-    "pg-monitor": "^0.7.1"
+    "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
     "cli-color": "^1.1.0",

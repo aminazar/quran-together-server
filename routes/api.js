@@ -64,5 +64,6 @@ router.delete('/user/auth', apiResponse('User', 'deleteAuthLink', true, ['user.e
 router.put('/khatm', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body']));
 router.post('/khatm/:khid', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body', 'params.khid']));
 router.get('/khatm', apiResponse('Khatm', 'selectAllKhatms', true, ['user.email']));
-router.post('/khatm/commitment/:khid/:pages', apiResponse('Khatm', 'assigningPage', true, ['user.uid', 'params.khid', 'params.pages']));
+router.post('/khatm/commitment/auto', apiResponse('Khatm', 'assigningPage', true, ['user.uid', 'body.khid', 'body.pages']));
+router.post('/khatm/commitment/commit', apiResponse('Khatm', 'commitPages', true, ['body.cids', 'body.isread']));
 module.exports = router;

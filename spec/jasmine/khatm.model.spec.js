@@ -10,6 +10,7 @@ describe("Test 'Khatm' model", () => {
   let B_uid;
   let A_khid;
   let B_khid;
+  let commitPages = [];
 
   beforeAll(done => {
     sql.test.users.create()
@@ -123,6 +124,69 @@ describe("Test 'Khatm' model", () => {
     expect(exp.repeats).toBe(2);
 
     done();
+  });
+
+  it("should generate share link for khatm created by user A", done => {
+    khatmObj.generateLink(A_khid)
+      .then((res) => {
+        expect(res).toBeTruthy();
+        done();
+      })
+      .catch((err) => {
+        fail(err.message);
+        done();
+      })
+  });
+
+  it("should assigning some pages to user B", done => {
+    Khatm.test = true;
+
+    Khatm.assigningPage(B_uid, B_khid, 10)
+      .then((res) => {
+        expect(res.length).toBe(10);
+        commitPages = res;
+        done();
+      })
+      .catch((err) => {
+        fail(err.message);
+        done();
+      });
+  });
+
+  it("should commit some pages for user B", done => {
+    Khatm.test = true;
+
+    let cidList = [];
+    for(let i=0; i<commitPages.length - 2; i++){
+      cidList.push(commitPages[i].cid);
+    }
+
+    Khatm.commitPages(cidList, true)
+      .then((res) => {
+        expect(true).toBe(true);
+        done();
+      })
+      .catch((err) => {
+        fail(err.message);
+        done();
+      })
+  });
+
+  it("should commit one page for user B", done => {
+    Khatm.test = true;
+
+    let cidList = [];
+    cidList.push(commitPages[commitPages.length - 1].cid);
+
+    Khatm.commitPages(cidList, true)
+      .then((res) => {
+        expect(true).toBe(true);
+        done();
+      })
+      .catch((err) => {
+        fail(err.message);
+        done();
+      })
   });
 
   afterAll(done => {

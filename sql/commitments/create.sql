@@ -30,7 +30,7 @@ CREATE TABLE commitments(
     isRead boolean not null default false
 );
 
---ALTER TABLE commitments ADD CONSTRAINT rangeChecker CHECK (null_checker(cdata, start_page, end_page));
+Alter table commitments add constraint uniqueCommitment unique(uid, khid, repeat_number, page_number);
 
 
 create function init_commitments(repeats integer, khid integer) returns void as $$

@@ -49,6 +49,9 @@ describe("Test 'khatms' table", () => {
       .then((res) => {
         expect(typeof res.khid).toBe('number');
         A_kid = res.khid;
+        return sql.test.commitments.init({repeats: 1, khid: A_kid});
+      })
+      .then((res) => {
         done();
       })
       .catch((err) => {
@@ -61,7 +64,7 @@ describe("Test 'khatms' table", () => {
     sql.test.khatms.getByEmail({email: 'a@ts.com'})
       .then((res) => {
         expect(res.length).toBe(1);
-        expect(res[0].name).toBe('first Khatm');
+        expect(res[0].khatm_name).toBe('first Khatm');
         expect(res[0].description).toBe('Khatm for test khatms table');
         expect(res[0].creator_shown).toBe(true);
         expect(res[0].start_date).toEqual(new Date(2017, 4, 30));
@@ -92,6 +95,9 @@ describe("Test 'khatms' table", () => {
       .then((res) => {
         expect(typeof res.khid).toBe('number');
         B_kid0 = res.khid;
+        return sql.test.commitments.init({repeats: 5, khid: B_kid0});
+      })
+      .then((res) => {
         done();
       })
       .catch((err) => {
@@ -114,6 +120,9 @@ describe("Test 'khatms' table", () => {
       .then((res) => {
         expect(typeof res.khid).toBe('number');
         B_kid1 = res.khid;
+        return sql.test.commitments.init({repeats: 5, khid: B_kid1});
+      })
+      .then((res) => {
         done();
       })
       .catch((err) => {
@@ -147,8 +156,8 @@ describe("Test 'khatms' table", () => {
     sql.test.khatms.getByEmail({email: 'b@ts.com'})
       .then((res) => {
         expect(res.length).toBe(2);
-        expect(res.map(el => el.name)).toContain('Drinking water');
-        expect(res.map(el => el.name)).toContain('Improvement');
+        expect(res.map(el => el.khatm_name)).toContain('Drinking water');
+        expect(res.map(el => el.khatm_name)).toContain('Improvement');
         expect(res.map(el => el.specific_sura)).toContain(null);
         done();
       })
@@ -162,7 +171,7 @@ describe("Test 'khatms' table", () => {
     sql.test.khatms.getByEmail({email: 'a@ts.com'})
       .then((res) => {
         expect(res.length).toBe(1);
-        expect(res[0].name).toBe('first good khatm');
+        expect(res[0].khatm_name).toBe('first good khatm');
         expect(res[0].creator_shown).toBe(false);
         expect(res[0].description).toBe('Khatm for pray');
         done();
@@ -173,12 +182,13 @@ describe("Test 'khatms' table", () => {
       })
   });
 
-  it("should delete a khatm (For user B)", done => {
+  //Delete a khatm not intended now
+  xit("should delete a khatm (For user B)", done => {
     sql.test.khatms.delete(B_kid0)
       .then((res) => sql.test.khatms.getByEmail({email: 'b@ts.com'}))
       .then((res) => {
         expect(res.length).toBe(1);
-        expect(res[0].name).toBe('Drinking water');
+        expect(res[0].khatm_name).toBe('Drinking water');
         done();
       })
       .catch((err) => {

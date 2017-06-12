@@ -68,7 +68,7 @@ describe("Test 'commitments' table",()=> {
     sql.test.commitments.add({
       uid: A_uid,
       khid: A_khid,
-      page_number: 1,
+      page_number: 1000,
       repeat_number: 1,
       isread: false
     })
@@ -168,6 +168,34 @@ describe("Test 'commitments' table",()=> {
         fail(err.message);
         done();
       })
+  });
+
+  it("should add some records (init) (For khatm created by user A)", done => {
+    sql.test.commitments.init({repeats: 2, khid: A_khid})
+      .then((res) => {
+        return env.testDb.query('select count(*) from commitments');
+      })
+      .then((res) => {
+        let expectedLen = (2*604) + (3);
+        expect(parseInt(res[0].count)).toBe(expectedLen);
+        done();
+      })
+      .catch((err) => {
+        fail(err.message);
+        done();
+      })
+  });
+
+  it("should get non chose page for specific khatm", done => {
+    sql.test.commitments.nonChosenPages({khid: A_khid})
+      .then((res) => {
+        expect(res.length).toBe(2*604);
+        done();
+      })
+      .catch((err) => {
+        fail(err.message);
+        done();
+      });
   });
 
   it("should delete commitment (For user A)", done => {

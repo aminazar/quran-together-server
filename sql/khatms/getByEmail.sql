@@ -1,7 +1,7 @@
-select *
+select t1.khid, *
 from
 (select
-  khatms.khid,
+  khatms.khid as khid,
   khatms.name as khatm_name,
   khatms.description,
   khatms.creator_shown,
@@ -33,11 +33,11 @@ where khatms.khid in (select kht_c.khid
 group by khatms.khid, users.email, users.name) as t1
 left outer join
 (select
-    khatms.khid,
+    khatms.khid as k,
     count(case when commitments.isread = true then 1 end) as you_read,
     count(case when commitments.isread = false then 1 end) as you_unread
 from users
 join commitments on users.uid = commitments.uid
 join khatms on khatms.khid = commitments.khid
 where lower(users.email) = lower(${email})
-group by khatms.khid) as t2 on t1.khid = t2.khid
+group by khatms.khid) as t2 on t2.k = t1.khid

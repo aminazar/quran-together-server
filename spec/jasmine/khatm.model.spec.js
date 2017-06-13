@@ -153,6 +153,20 @@ describe("Test 'Khatm' model", () => {
       });
   });
 
+  it("should assigning remained pages to user B (Requested pages greater than free pages)", done => {
+    Khatm.test = true;
+
+    Khatm.assigningPage(B_uid, B_khid, (2*604) + 10)
+      .then((res) => {
+        expect(res.length).toBe((2 * 604) - 11);
+        done();
+      })
+      .catch((err) => {
+        fail(err.message);
+        done();
+      });
+  });
+
   it("should commit some pages for user B", done => {
     Khatm.test = true;
 

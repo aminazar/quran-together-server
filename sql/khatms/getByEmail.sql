@@ -1,16 +1,6 @@
-/*
-select khatms.*, users.name as ownerName
-from khatms
-join users on users.uid = khatms.creator_id
-where  lower(users.email) = lower(${email})
-union
-select khatms.*, owner.name as ownerName
-from khatms
-join commitments on khatms.khid = commitments.khid
-join users as owner on owner.uid = khatms.creator_id
-where commitments.uid in (select users.uid from users where lower(users.email) = lower(${email}))*/
-
-select
+select *
+from
+(select
   khatms.khid,
   khatms.name as khatm_name,
   khatms.description,
@@ -40,4 +30,14 @@ where khatms.khid in (select kht_c.khid
                       join commitments as com on kht_u.khid = com.khid
                       join users as us_u on com.uid = us_u.uid
                       where lower(us_u.email) = lower(${email}))
-group by khatms.khid, users.email, users.name
+group by khatms.khid, users.email, users.name) as t1
+left outer join
+(select
+    khatms.khid,
+    count(case when commitments.isread = true then 1 end) as you_read,
+    count(case when commitments.isread = false then 1 end) as you_unread
+from users
+join commitments on users.uid = commitments.uid
+join khatms on khatms.khid = commitments.khid
+where lower(users.email) = lower(${email})
+group by khatms.khid) as t2 on t1.khid = t2.khid

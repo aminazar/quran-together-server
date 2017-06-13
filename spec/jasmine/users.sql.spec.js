@@ -77,8 +77,6 @@ describe("Test 'users' table",()=>{
   });
 
   afterAll((done)=>{
-    if(uid)
-      sql.test.users.drop().then(res=>done()).catch(err=>{console.log(err.message);done()});
-    else done();
+    sql.test.users.drop().then(res=>done()).catch(err=>{console.log(err.message);done()});
   });
 });

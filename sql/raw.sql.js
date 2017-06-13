@@ -48,5 +48,6 @@ module.exports = {
     getByUser:      sql('commitments/getByUser.sql'),
     init:           sql('commitments/init.sql'),
     nonChosenPages: sql('commitments/nonChosenPages.sql'),
+    deleteByKhatm:  sql('commitments/deleteByKhatm.sql'),
   },
 };

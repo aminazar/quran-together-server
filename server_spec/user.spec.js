@@ -58,6 +58,10 @@ describe("User API", () => {
       done();
   });
 
+  it('should pass a inevitable spec', () => {
+    expect(true).toBe(true);
+  });
+
   it("user should able to register", (done) => {
     request.put({
       url: base_url + 'user' + test_query,
@@ -65,15 +69,24 @@ describe("User API", () => {
     }, (err, res) => {
       if(resExpect(res, 200)){
         uid = res.uid;
-        console.log(res);
+        // console.log(res);
       }
       done();
     })
   }, 10000);
 
+  it("should show correct row numbers of user table",(done)=>{
+    sql.test.users.select()
+      .then((res)=>{
+        expect(res.length).toBe(1);
+        done();
+      })
+  });
+
   it("user should able to confirm the registration", (done) => {
     sql.test.user_confirmation.getAll()
       .then((res) => {
+        expect(res.length).toBe(1);
         request.post({
           url: base_url + 'user/auth' + test_query,
           form: {email: 'ali.71hariri@gmail.com', code: res[0].phrase}
@@ -93,7 +106,6 @@ describe("User API", () => {
   });
 
   it("hashLink should delete", (done) => {
-
     request.delete({
       headers: {
         email: userEmail, token: userToken
@@ -103,12 +115,20 @@ describe("User API", () => {
     }, (err, res) => {
       if(resExpect(res, 200)){
         expect(true).toBe(true);
+        return sql.test.user_confirmation.getAll()
+        .then((res)=>{
+          expect(res.length).toBe(0);
+          done();
+        })
+        .catch((err)=>{
+         console.log(err.message);
+         done();
+        })
       }
-      done();
     })
   });
 
-  it("another_user should able to register", (done) => {
+  xit("another_user should able to register", (done) => {
     request.put({
       url: base_url + 'user' + test_query,
       form: {email: 'alireza.3h1993@yahoo.com', name: 'Reza'}
@@ -121,7 +141,7 @@ describe("User API", () => {
     })
   }, 10000);
 
-  it("another_user should able to confirm the registration", (done) => {
+  xit("another_user should able to confirm the registration", (done) => {
     sql.test.user_confirmation.getAll()
       .then((res) => {
         request.post({
@@ -142,7 +162,7 @@ describe("User API", () => {
       })
   });
 
-  it("registered another_user should get token (like login in another device)" ,(done) => {
+  xit("registered another_user should get token (like login in another device)" ,(done) => {
     request.put({
       url: base_url + 'user' + test_query,
       form: {email: another_userEmail, name: 'Reza'}
@@ -175,7 +195,7 @@ describe("User API", () => {
     });
   });
 
-  it("user should exist", (done) => {
+  xit("user should exist", (done) => {
     request.post({
       url: base_url + 'user/exist' + test_query,
       form: {email: userEmail}
@@ -188,7 +208,7 @@ describe("User API", () => {
     })
   });
 
-  it("user should not exist", (done) => {
+  xit("user should not exist", (done) => {
     request.post({
       url: base_url + 'user/exist' + test_query,
       form: {email: 'ts@ts.com'}
@@ -201,7 +221,7 @@ describe("User API", () => {
     })
   });
 
-  it("should get access defined error", (done) => {
+  xit("should get access defined error", (done) => {
     request.delete({
       headers: {email: userEmail},
       url: base_url + 'user/auth' + test_query

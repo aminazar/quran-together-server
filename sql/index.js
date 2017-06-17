@@ -114,8 +114,8 @@ tablesWithSqlCreatedByHelpers.forEach((table)=>{
   }
 
   if(table.select) {
-    wrappedSQL[table.name].select       = genericUpdate(table.name, false);
-    wrappedSQL.test[table.name].select  = genericUpdate(table.name, true);
+    wrappedSQL[table.name].select       = genericSelect(table.name, false);
+    wrappedSQL.test[table.name].select  = genericSelect(table.name, true);
   }
 
   if(table.delete){

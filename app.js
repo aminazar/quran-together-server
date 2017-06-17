@@ -36,7 +36,7 @@ app.use(function (req, res, next) {
     next();
   }
   else{
-    let user = app.locals.userMap.get(email);
+    let user = lib.helpers.isTestReq(req) ? undefined : app.locals.userMap.get(email);
 
     //Check user from map
     if(user !== undefined){
@@ -49,6 +49,7 @@ app.use(function (req, res, next) {
         user.destroy = setTimeout(function(){
           app.locals.userMap.delete(email);
         }, user.timeOut);
+        console.log(user);
         req.user = user;
         next();
       }

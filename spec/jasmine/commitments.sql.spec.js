@@ -198,6 +198,21 @@ describe("Test 'commitments' table",()=> {
       });
   });
 
+  it("should delete commitments related to specific khatm", done => {
+    sql.test.commitments.deleteByKhatm({khid: A_khid})
+      .then((res) => {
+        return sql.test.commitments.getByKhatm({khid: A_khid});
+      })
+      .then((res) => {
+        expect(res.length).toBe(0);
+        done();
+      })
+      .catch((err) => {
+        fail(err.message);
+        done();
+      })
+  });
+
   it("should delete commitment (For user A)", done => {
     sql.test.commitments.delete(A_cid)
       .then((res) => {

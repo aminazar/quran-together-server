@@ -1,3 +1,3 @@
 select *
 from commitments
-where uid = ${uid} and khid = ${khid}
+where uid = ${uid} and isread = false

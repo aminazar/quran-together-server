@@ -45,6 +45,7 @@ module.exports = {
     create:         sql('commitments/create.sql'),
     drop:           sql('commitments/drop.sql'),
     getByKhatm:     sql('commitments/getByKhatm.sql'),
+    getByUserKhatm: sql('commitments/getByUserKhatm.sql'),
     getByUser:      sql('commitments/getByUser.sql'),
     init:           sql('commitments/init.sql'),
     nonChosenPages: sql('commitments/nonChosenPages.sql'),

@@ -13,7 +13,6 @@ from
   users.name as owner_name,
   users.email as owner_nmail,
   khatms.share_link,
-  khatms.end_date - khatms.start_date as rest_days,
   count(case when commitments.uid is not null then 1 end)  as commitment_pages,
   count(case when (commitments.uid is not null and commitments.isread = true) then 1 end) as read_pages,
   count(distinct commitments.uid) as participatings

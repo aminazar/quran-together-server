@@ -69,16 +69,33 @@ describe("User API", () => {
     }, (err, res) => {
       if(resExpect(res, 200)){
         uid = res.uid;
-        // console.log(res);
+        // console.log('**********');
+        // console.log(typeof(res), ': res');
+        // let i = 0;
+        // for(key in res) {
+        //   i++;
+        //   console.log(i,key);
+        // }
+        // console.log('**********');
+        // console.log(res.statusCode);
       }
       done();
     })
   }, 10000);
 
-  it("should show correct row numbers of user table",(done)=>{
+  it("should show correct row numbers of users and user_confirmation table",(done)=>{
     sql.test.users.select()
       .then((res)=>{
         expect(res.length).toBe(1);
+        console.log(res);
+        return sql.test.user_confirmation.select()
+          .then((res)=>{
+            expect(res.length).toBe(1);
+            done();
+          })
+      })
+      .catch((err)=>{
+        console.log(err.message);
         done();
       })
   });
@@ -87,13 +104,14 @@ describe("User API", () => {
     sql.test.user_confirmation.getAll()
       .then((res) => {
         expect(res.length).toBe(1);
+        expect(res[0].uid).not.toBe(null);
+        expect(res[0].phrase).not.toBe(null);
         request.post({
           url: base_url + 'user/auth' + test_query,
           form: {email: 'ali.71hariri@gmail.com', code: res[0].phrase}
         }, (err, res) => {
           if(err)
             console.log(err.message);
-
           if(resExpect(res, 200)){
             let data = JSON.parse(res.body);
             userToken = data.token;
@@ -116,41 +134,49 @@ describe("User API", () => {
       if(resExpect(res, 200)){
         expect(true).toBe(true);
         return sql.test.user_confirmation.getAll()
-        .then((res)=>{
-          expect(res.length).toBe(0);
-          done();
-        })
-        .catch((err)=>{
-         console.log(err.message);
-         done();
-        })
+          .then((res)=>{
+            expect(res.length).toBe(0);
+            done();
+          })
+          .catch((err)=>{
+           console.log(err.message);
+           done();
+          })
       }
     })
   });
 
-  xit("another_user should able to register", (done) => {
+  it("another_user should able to register", (done) => {
     request.put({
       url: base_url + 'user' + test_query,
       form: {email: 'alireza.3h1993@yahoo.com', name: 'Reza'}
     }, (err, res) => {
       if(resExpect(res, 200)){
-        uid = res.uid;
-        console.log(res);
+        uid = res.uid;//??????????????????????
+        console.log(res.uid);
+        sql.test.users.select()
+          .then((res)=>{
+            expect(res.length).toBe(2);
+            return sql.test.user_confirmation.select()
+              .then((res)=>{
+                expect(res.length).toBe(1);
+                done();
+              })
+          })
       }
-      done();
     })
   }, 10000);
 
-  xit("another_user should able to confirm the registration", (done) => {
+  it("another_user should able to confirm the registration", (done) => {
     sql.test.user_confirmation.getAll()
       .then((res) => {
+      expect(res.length).toBe(1);
         request.post({
           url: base_url + 'user/auth/' + test_query,
           form: {email: 'alireza.3h1993@yahoo.com', code: res[0].phrase}
         }, (err, res) => {
           if(err)
             console.log(err.message);
-
           if(resExpect(res, 200)){
             let data = JSON.parse(res.body);
             another_userToken = data.token;
@@ -162,19 +188,18 @@ describe("User API", () => {
       })
   });
 
-  xit("registered another_user should get token (like login in another device)" ,(done) => {
+  it("registered another_user should get token (like login in another device)" ,(done) => {
     request.put({
       url: base_url + 'user' + test_query,
       form: {email: another_userEmail, name: 'Reza'}
     }, (err, res) => {
       if(resExpect(res, 200)){
-
         sql.test.user_confirmation.getAll()
           .then((data) => {
+            expect(data.length).toBe(2);
             let dt = data.filter((el) => el.uid === uid);
             hashLink = dt.find((el) => el.phrase !== hashLink).phrase;
             expect(dt.length).toBe(2);
-
             request.get({
               url: base_url + 'auth/' + hashLink + test_query
             }, (error, response) => {
@@ -195,7 +220,7 @@ describe("User API", () => {
     });
   });
 
-  xit("user should exist", (done) => {
+  it("user should exist", (done) => {
     request.post({
       url: base_url + 'user/exist' + test_query,
       form: {email: userEmail}
@@ -208,7 +233,7 @@ describe("User API", () => {
     })
   });
 
-  xit("user should not exist", (done) => {
+  it("user should not exist", (done) => {
     request.post({
       url: base_url + 'user/exist' + test_query,
       form: {email: 'ts@ts.com'}
@@ -221,13 +246,24 @@ describe("User API", () => {
     })
   });
 
-  xit("should get access defined error", (done) => {
+  it("should get access defined error", (done) => {
     request.delete({
       headers: {email: userEmail},
       url: base_url + 'user/auth' + test_query
     }, (err, res) => {
       if(resExpect(res, 403)){
         expect(true).toBe(true);
+        sql.test.user_confirmation.select()
+          .then((res)=>{
+            expect(res.length).toBe(2);
+            return sql.test.users.select()
+              .then((res)=>{
+                expect(res.length).toBe(2);
+                console.log(res);
+                expect(res[0].token).toEqual(userToken);
+                expect(res[1].token).toEqual(another_userToken);
+              })
+          })
       }
       done();
     })

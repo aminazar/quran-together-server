@@ -31,6 +31,7 @@ let resExpect = (res, statusCode) => {
 
 describe("User API", () => {
   let uid;
+  let another_uid;
   let isSetup = false;
   let tearDown = false;
   let userToken = '';
@@ -68,29 +69,23 @@ describe("User API", () => {
       form: {email: 'ali.71hariri@gmail.com', name: 'Alireza'}
     }, (err, res) => {
       if(resExpect(res, 200)){
-        uid = res.uid;
-        // console.log('**********');
-        // console.log(typeof(res), ': res');
-        // let i = 0;
-        // for(key in res) {
-        //   i++;
-        //   console.log(i,key);
-        // }
-        // console.log('**********');
-        // console.log(res.statusCode);
+        uid = JSON.parse(res.body);
       }
       done();
     })
-  }, 10000);
+  }, 15000);
 
   it("should show correct row numbers of users and user_confirmation table",(done)=>{
     sql.test.users.select()
       .then((res)=>{
         expect(res.length).toBe(1);
-        console.log(res);
-        return sql.test.user_confirmation.select()
+        expect(res[0].token).toBe(null);
+        expect(res[0].uid).toBe(uid);
+        expect(res[0].email).not.toBe(null);
+        return sql.test.user_confirmation.getAll()
           .then((res)=>{
             expect(res.length).toBe(1);
+            expect(res[0].uid).toBe(uid);
             done();
           })
       })
@@ -152,20 +147,23 @@ describe("User API", () => {
       form: {email: 'alireza.3h1993@yahoo.com', name: 'Reza'}
     }, (err, res) => {
       if(resExpect(res, 200)){
-        uid = res.uid;//??????????????????????
-        console.log(res.uid);
+        another_uid = JSON.parse(res.body);
         sql.test.users.select()
           .then((res)=>{
             expect(res.length).toBe(2);
-            return sql.test.user_confirmation.select()
+            expect(res.filter((el)=> el.token !== null).length).toBe(1);
+            expect(res.filter((el)=> el.token === null).length).toBe(1);
+            return sql.test.user_confirmation.getAll()
               .then((res)=>{
                 expect(res.length).toBe(1);
+                expect(res[0].uid).toBe(another_uid);
+                expect(res.filter((el)=> el.uid === uid).length).toBe(0);
                 done();
               })
           })
       }
     })
-  }, 10000);
+  }, 15000);
 
   it("another_user should able to confirm the registration", (done) => {
     sql.test.user_confirmation.getAll()
@@ -195,14 +193,17 @@ describe("User API", () => {
     }, (err, res) => {
       if(resExpect(res, 200)){
         sql.test.user_confirmation.getAll()
-          .then((data) => {
+          .then((res) => {
+            expect(res.length).toBe(2);
+            let data = res.filter((el) => el.uid === another_uid);
             expect(data.length).toBe(2);
-            let dt = data.filter((el) => el.uid === uid);
-            hashLink = dt.find((el) => el.phrase !== hashLink).phrase;
-            expect(dt.length).toBe(2);
-            request.get({
-              url: base_url + 'auth/' + hashLink + test_query
+            request.post({
+              url: base_url + 'user/auth/' + test_query,
+              form: {email: another_userEmail, code: res[0].phrase}  //can send res[1].phrase for code insted of res[0].phrase too
             }, (error, response) => {
+              if(error)
+                console.log(error.message);
+
               if(resExpect(response, 200)){
                 let body = JSON.parse(response.body);
                 expect(body.token).toBe(another_userToken);
@@ -253,13 +254,14 @@ describe("User API", () => {
     }, (err, res) => {
       if(resExpect(res, 403)){
         expect(true).toBe(true);
-        sql.test.user_confirmation.select()
+        sql.test.user_confirmation.getAll()
           .then((res)=>{
             expect(res.length).toBe(2);
+            expect(res.filter((el)=> el.uid === another_uid).length).toBe(2);
+            expect(res.filter((el)=> el.uid === uid).length).toBe(0);
             return sql.test.users.select()
               .then((res)=>{
                 expect(res.length).toBe(2);
-                console.log(res);
                 expect(res[0].token).toEqual(userToken);
                 expect(res[1].token).toEqual(another_userToken);
               })
@@ -268,6 +270,70 @@ describe("User API", () => {
       done();
     })
   });
+
+  it("should delete all by-email-recived codes to a user after first confirmation(calling delete api) even some those codes aren't used", (done) =>{
+    sql.test.user_confirmation.getAll()
+      .then((res)=>{
+        expect(res.length).toBe(2);
+        expect(res.filter((el)=> el.uid === another_uid).length).toBe(2);
+        req.delete({
+          headers: {
+            email: another_userEmail, token: another_userToken
+          },
+          url: base_url + 'user/auth' + test_query
+        },(err,res) =>{
+          if(err)
+            console.log(err.message);
+
+          if(resExpect(res,200)){
+            expect(true).toBe(true);
+            return sql.test.user_confirmation.getAll()
+              .then((res)=>{
+                expect(res.length).toBe(0);
+                done();
+              })
+          }
+          done();
+        })
+      })
+      .catch((err) => {
+        console.log(err.message);
+        done()
+      });
+  })
+
+  xit("should not register or do confirmation if user entered incorrect code", (done)=>{
+    request.put({
+      url: base_url + 'user' + test_query,
+      form: {email: 'ali.71hariri@gmail.com', name: 'Alireza'}
+    }, (err, res) => {
+      if(resExpect(res, 200)){
+        expect(true).toBe(true);
+        return sql.test.user_confirmation.getAll()
+          .then((res)=>{
+            expect(res.length).toBe(1);
+            request.post({
+              url: base_url + 'user/auth' + test_query,
+              form: {email: 'ali.71hariri@gmail.com', code: res[0].phrase}
+            }, (err, res) => {
+
+              if(err)
+                console.log(err.message);
+
+              if(resExpect(res, 200)){
+                let data = JSON.parse(res.body);
+                expect(true).toBe(true);
+                return sql.test.users.select()
+                  .then((res)=>{
+                    expect(true).toBe(true);
+                    done();
+                  })
+              }
+            })
+          })
+      }
+    })
+  },10000);
 
   it("tearDown", (done) => {
     tearDown = true;

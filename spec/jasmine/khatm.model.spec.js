@@ -186,6 +186,20 @@ describe("Test 'Khatm' model", () => {
       })
   });
 
+  it("should delete some committed pages (For user B)", done => {
+    Khatm.test = true;
+
+    Khatm.assigningPage(B_uid, B_khid, 20)
+      .then((res) => {
+        expect(res.length).toBe((2 * 604) - 11 - 20 + 2);
+        done();
+      })
+      .catch((err) => {
+        fail(err.message);
+        done();
+      });
+  });
+
   it("should commit one page for user B", done => {
     Khatm.test = true;
 

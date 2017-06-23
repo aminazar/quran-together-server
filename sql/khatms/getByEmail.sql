@@ -1,17 +1,7 @@
-/*
-select khatms.*, users.name as ownerName
-from khatms
-join users on users.uid = khatms.creator_id
-where  lower(users.email) = lower(${email})
-union
-select khatms.*, owner.name as ownerName
-from khatms
-join commitments on khatms.khid = commitments.khid
-join users as owner on owner.uid = khatms.creator_id
-where commitments.uid in (select users.uid from users where lower(users.email) = lower(${email}))*/
-
-select
-  khatms.khid,
+select t1.khid, *
+from
+(select
+  khatms.khid as khid,
   khatms.name as khatm_name,
   khatms.description,
   khatms.creator_shown,
@@ -23,7 +13,6 @@ select
   users.name as owner_name,
   users.email as owner_nmail,
   khatms.share_link,
-  khatms.end_date - khatms.start_date as rest_days,
   count(case when commitments.uid is not null then 1 end)  as commitment_pages,
   count(case when (commitments.uid is not null and commitments.isread = true) then 1 end) as read_pages,
   count(distinct commitments.uid) as participatings
@@ -40,4 +29,14 @@ where khatms.khid in (select kht_c.khid
                       join commitments as com on kht_u.khid = com.khid
                       join users as us_u on com.uid = us_u.uid
                       where lower(us_u.email) = lower(${email}))
-group by khatms.khid, users.email, users.name
+group by khatms.khid, users.email, users.name) as t1
+left outer join
+(select
+    khatms.khid as k,
+    count(case when commitments.isread = true then 1 end) as you_read,
+    count(case when commitments.isread = false then 1 end) as you_unread
+from users
+join commitments on users.uid = commitments.uid
+join khatms on khatms.khid = commitments.khid
+where lower(users.email) = lower(${email})
+group by khatms.khid) as t2 on t2.k = t1.khid

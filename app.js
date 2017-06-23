@@ -49,7 +49,6 @@ app.use(function (req, res, next) {
         user.destroy = setTimeout(function(){
           app.locals.userMap.delete(email);
         }, user.timeOut);
-        console.log(user);
         req.user = user;
         next();
       }

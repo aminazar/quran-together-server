@@ -70,6 +70,10 @@ describe("Khatm API", () => {
       done();
   });
 
+  it('should pass a inevitable spec', () => {
+    expect(true).toBe(true);
+  });
+
   it("should A user add new khatm", done => {
     request.put({
       headers: {email: 'a@ts.com', token: '1234567890qazwsx'},
@@ -83,14 +87,24 @@ describe("Khatm API", () => {
         repeats: 2
       }
     }, (err, res) => {
-      if(err)
+      if(err) {
         fail(err.message);
+        done();
+      }
 
       if(resExpect(res, 200)) {
         let data = JSON.parse(res.body);
         A_khid0 = data;
+        sql.test.khatms.select()
+          .then((res)=>{
+            expect(res.length).toBe(1);
+            done();
+          })
+          .catch((err)=>{
+            console.log(err.message);
+            done();
+          })
       }
-      done();
     })
   });
 
@@ -114,6 +128,13 @@ describe("Khatm API", () => {
       if(resExpect(res, 200)) {
         let data = JSON.parse(res.body);
         A_khid1 = data;
+        sql.test.khatms.select()
+          .then((res)=>{
+            expect(res.length).toBe(2);
+          })
+          .catch((err)=>{
+            console.log(err.message);
+          })
       }
 
       done();
@@ -134,9 +155,16 @@ describe("Khatm API", () => {
       if(err)
         fail(err.message);
 
-      if(resExpect(res, 200))
+      if(resExpect(res, 200)) {
         B_khid = res.kid;
-
+        sql.test.khatms.select()
+          .then((res)=>{
+            expect(res.length).toBe(3);
+          })
+          .catch((err)=>{
+            console.log(err.message);
+          })
+      }
       done();
     })
   });
@@ -152,12 +180,11 @@ describe("Khatm API", () => {
       if(resExpect(res, 200)) {
         let data = JSON.parse(res.body);
         expect(data.length).toBe(2);
-        expect(data[0].name).toBe('second khatm');
-        expect(data[0].repeats).toBe(1);
+        expect(data[0].khatm_name).toBe('first khatm');
+        expect(data[0].repeats).toBe(2);
         expect(data[0].description).toBe(null);
-        expect(data[0].specific_sura).toBe(2);
+        expect(data[0].specific_sura).toBe(null);
       }
-
       done();
     });
   });
@@ -180,10 +207,9 @@ describe("Khatm API", () => {
         fail(err.message);
 
       if(resExpect(res, 200)){
-        console.log(res);
+        // console.log(res);
         expect(true).toBe(true);
       }
-
       done();
     })
   });
@@ -199,7 +225,7 @@ describe("Khatm API", () => {
       if(resExpect(res, 200)) {
         let data = JSON.parse(res.body);
         expect(data.length).toBe(2);
-        expect(data[0].name).toBe('first khatm');
+        expect(data[0].khatm_name).toBe('first khatm');
         expect(data[0].repeats).toBe(2);
         expect(data[0].description).toBe('new DSCP');
         expect(data[0].specific_sura).toBe(null);
@@ -209,7 +235,7 @@ describe("Khatm API", () => {
     });
   });
 
-  it("should B user get all khatms", done => {
+  xit("should B user get all khatms", done => {
     request.get({
       headers: {email: 'b@ts.com', token: '0987654321qazwsx'},
       url: base_url + 'khatm' + test_query
@@ -220,7 +246,7 @@ describe("Khatm API", () => {
       if(resExpect(res, 200)) {
         let data = JSON.parse(res.body);
         expect(data.length).toBe(1);
-        expect(data[0].name).toBe('For God');
+        expect(data[0].khatm_name).toBe('For God');
         expect(data[0].repeats).toBe(1);
         expect(data[0].creator_shown).toBe(true);
         expect(data[0].description).toBe('In the Ramezan month');

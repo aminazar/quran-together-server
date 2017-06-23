@@ -136,9 +136,9 @@ describe("Test 'commitments' table",()=> {
   });
 
   it("should fetch all commitments (For user B)", done => {
-    sql.test.commitments.getByUser({uid: B_uid})
+    sql.test.commitments.getByUserKhatm({uid: B_uid, khid: B_khid})
       .then((res) => {
-        expect(res.length).toBe(2);
+        expect(res.length).toBe(1);
         expect(res.map(el => el.isread)).toContain(false);
         done();
       })
@@ -157,7 +157,7 @@ describe("Test 'commitments' table",()=> {
       isread: true
     }, A_cid)
       .then((res) => {
-        return sql.test.commitments.getByUser({uid: A_uid});
+        return sql.test.commitments.getByUserKhatm({uid: A_uid, khid: A_khid});
       })
       .then((res) => {
         expect(res.length).toBe(1);
@@ -216,7 +216,7 @@ describe("Test 'commitments' table",()=> {
   it("should delete commitment (For user A)", done => {
     sql.test.commitments.delete(A_cid)
       .then((res) => {
-        return sql.test.commitments.getByUser({uid: A_uid});
+        return sql.test.commitments.getByUserKhatm({uid: A_uid, khid: A_khid});
       })
       .then((res) => {
         expect(res.length).toBe(0);

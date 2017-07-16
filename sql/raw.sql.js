@@ -40,6 +40,7 @@ module.exports = {
     create:         sql('khatms/create.sql'),
     drop:           sql('khatms/drop.sql'),
     getByEmail:     sql('khatms/getByEmail.sql'),
+    getByShareLink: sql('khatms/getByShareLink.sql'),
   },
   commitments: {
     create:         sql('commitments/create.sql'),
@@ -50,5 +51,6 @@ module.exports = {
     init:           sql('commitments/init.sql'),
     nonChosenPages: sql('commitments/nonChosenPages.sql'),
     deleteByKhatm:  sql('commitments/deleteByKhatm.sql'),
+    getRemains:     sql('commitments/getRemains.sql'),
   },
 };

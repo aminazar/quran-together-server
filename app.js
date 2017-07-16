@@ -43,7 +43,7 @@ app.use(function (req, res, next) {
       //The user is on map
       if(user.token !== token){
         res.status(403)
-          .send('The username or token doest not acceptable');
+          .send('The email or token doest not acceptable');
       }
       else{
         user.destroy = setTimeout(function(){

@@ -68,5 +68,5 @@ router.post('/khatm/commitment/auto', apiResponse('Khatm', 'assigningPage', true
 router.post('/khatm/commitment/commit', apiResponse('Khatm', 'commitPages', true, ['body.cids', 'body.isread']));
 router.get('/khatm/commitment/all', apiResponse('Khatm', 'getAllRemainedCommitments', true, ['user.uid']));
 router.get('/khatm/commitment/:khid', apiResponse('Khatm', 'getRemainCommitments', true, ['user.uid', 'params.khid']));
-router.get('/khatm/link/:link', apiResponse('Khatm', 'getKhatmByLink', false, ['params.link']));
+router.get('/khatm/link/:link', apiResponse('Khatm', 'getKhatmByLink', true, ['params.link', 'user.email']));
 module.exports = router;

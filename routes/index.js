@@ -5,9 +5,7 @@ const path = require('path');
 /* Diverting unknown routes to Angular router */
 router.all("*",function(req,res,next){
   /* Redirect http to https */
-  if(req.headers['x-forwarded-proto'] != 'https' && process.env.NODE_ENV === 'production')
-    res.redirect('https://'+req.headers.host+req.url);
-  else if(req.originalUrl.indexOf('api') === -1) {
+  if(req.originalUrl.indexOf('api') === -1) {
     console.log('[TRACE] Server 404 request: ' + req.originalUrl);
     var p = path.join(__dirname, '../public', 'index.html').replace(/\/routes\//, '/');
     res.status(200).sendFile(p);

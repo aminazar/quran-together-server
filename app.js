@@ -4,11 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var bluebird = require('bluebird');
-var redis = require('redis');
-var redis_client = redis.createClient({
-  socket_keepalive: true
-});
 
 var api = require('./routes/api');
 var index = require('./routes/index');
@@ -31,63 +26,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
-
-let redisIsReady = false;
-
-redis_client.on('ready', () => {
-  console.log('Redis is ready');
-  redisIsReady = true;
-});
-
-redis_client.on('error', (err) => {
-  console.log(err);
-  redisIsReady = false;
-});
-
-function getUser(email){
-  if(redisIsReady)
-    return redis_client.getAsync(email);
-  return null;
-};
-
-function setUser(email, user){
-  if(redisIsReady) {
-    redis_client.setAsync(email, user);
-    setExpiration(email);
-  }
-}
-
-function setExpiration(email) {
-  //Set expiration time to 10 minutes later (Each manipulation on user refresh this expiration time)
-  if(redisIsReady)
-    redis_client.expireAsync(email, 600);
-}
-
-function loadUserFromDatabase(email, token, isTest) {
-  return new Promise((resolve, reject) => {
-    let curSql = isTest ? sql.test : sql;
-
-    curSql.users.get({email: email, token: token})
-      .then((res) => {
-        let user = {
-          uid: res[0].uid,
-          email: res[0].email,
-          name: res[0].name,
-          token: res[0].token
-        };
-
-        setUser(email, JSON.stringify(user));
-
-        resolve(user);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  })
-}
-
 //Authentication handler
 app.use(function (req, res, next) {
   let email = req.headers.email;
@@ -98,46 +36,49 @@ app.use(function (req, res, next) {
     next();
   }
   else{
-    if(lib.helpers.isTestReq(req)){
+    let user = lib.helpers.isTestReq(req) ? undefined : app.locals.userMap.get(email);
+
+    //Check user from map
+    if(user !== undefined){
+      //The user is on map
+      if(user.token !== token){
+        res.status(403)
+          .send('The email or token doest not acceptable');
+      }
+      else{
+        user.destroy = setTimeout(function(){
+          app.locals.userMap.delete(email);
+        }, user.timeOut);
+        req.user = user;
+        next();
+      }
+    }
+    else{
       //Should load user from database
-      loadUserFromDatabase(email, token, lib.helpers.isTestReq(req))
-        .then(user => {
+      let curSql = lib.helpers.isTestReq(req) ? sql.test : sql;
+
+      curSql.users.get({email: email, token: token})
+        .then((res) => {
+          user = {
+            uid: res[0].uid,
+            email: res[0].email,
+            name: res[0].name,
+            token: res[0].token,
+            timeOut: 600000
+          };
+          user.destroy = setTimeout(function(){
+            app.locals.userMap.delete(email);
+          }, user.timeOut);
+
+          app.locals.userMap.set(email, user);
+
           req.user = user;
           next();
         })
-        .catch(err => {
+        .catch((err) => {
           res.status(404)
             .send('User not found');
-        })
-    }
-    else{
-      getUser(email)
-        .then(user => {
-          user = JSON.parse(user);
-          if(user === null){
-            loadUserFromDatabase(email, token, lib.helpers.isTestReq(req))
-              .then(user => {
-                req.user = user;
-                next();
-              })
-              .catch(err => {
-                res.status(404)
-                  .send('User not found');
-              })
-          }
-          else{
-            //The user is on the redis
-            if(user.token !== token){
-              res.status(403)
-                .send('The email or token doest not acceptable');
-            }
-            else{
-              setExpiration(email);
-              req.user = user;
-              next();
-            }
-          }
-        })
+        });
     }
   }
 });

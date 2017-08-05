@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var bluebird = require('bluebird');
-var env = require('env');
+var env = require('./env');
 var redis = require('redis');
 var redis_client = redis.createClient(env.isProd?process.env.REDIS_URL:{
   socket_keepalive: true

@@ -18,7 +18,6 @@ var lib = require('./lib');
 
 var app = express();
 
-app.locals.userMap = new Map();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -118,6 +117,7 @@ app.use(function (req, res, next) {
           if(user === null){
             loadUserFromDatabase(email, token, lib.helpers.isTestReq(req))
               .then(user => {
+                setUser(email, user);
                 req.user = user;
                 next();
               })

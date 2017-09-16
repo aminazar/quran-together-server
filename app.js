@@ -117,7 +117,7 @@ app.use(function (req, res, next) {
           if(user === null){
             loadUserFromDatabase(email, token, lib.helpers.isTestReq(req))
               .then(user => {
-                setUser(email, user);
+                setUser(email, JSON.stringify(user));
                 req.user = user;
                 next();
               })

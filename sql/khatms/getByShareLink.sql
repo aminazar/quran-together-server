@@ -11,7 +11,7 @@ from
   khatms.specific_sura,
   khatms.repeats,
   users.name as owner_name,
-  users.email as owner_nmail,
+  users.email as owner_email,
   khatms.share_link,
   count(case when commitments.uid is not null then 1 end)  as commitment_pages,
   count(case when (commitments.uid is not null and commitments.isread = true) then 1 end) as read_pages,

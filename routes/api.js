@@ -69,4 +69,7 @@ router.post('/khatm/commitment/commit', apiResponse('Khatm', 'commitPages', true
 router.get('/khatm/commitment/all', apiResponse('Khatm', 'getAllRemainedCommitments', true, ['user.uid']));
 router.get('/khatm/commitment/:khid', apiResponse('Khatm', 'getRemainCommitments', true, ['user.uid', 'params.khid']));
 router.get('/khatm/link/:link', apiResponse('Khatm', 'getKhatmByLink', true, ['params.link', 'user.email']));
+
+//Push notification API
+router.post('/notification/token', apiResponse('Khatm', 'storeDeviceToken', true, ['body.token', 'user.email']));
 module.exports = router;

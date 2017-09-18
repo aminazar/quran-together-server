@@ -41,6 +41,7 @@ module.exports = {
     drop:           sql('khatms/drop.sql'),
     getByEmail:     sql('khatms/getByEmail.sql'),
     getByShareLink: sql('khatms/getByShareLink.sql'),
+    getNotRead:     sql('khatms/getNotRead.sql'),
   },
   commitments: {
     create:         sql('commitments/create.sql'),

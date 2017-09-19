@@ -43,6 +43,12 @@ function prodTablesCreate() {
       .then(() => {
         return createOrExist('commitments');
       })
+      .then(() => {
+        return createOrExist('khatm_stat');
+      })
+      .then(() => {
+        return createOrExist('khatm_user_stat');
+      })
       .then(() => resolve())
       .catch((err) => {
         reject(err);

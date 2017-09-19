@@ -42,6 +42,7 @@ module.exports = {
     getByEmail:     sql('khatms/getByEmail.sql'),
     getByShareLink: sql('khatms/getByShareLink.sql'),
     getNotRead:     sql('khatms/getNotRead.sql'),
+    clearDeadKhatmCommitments: sql('khatms/clearDeadKhatmCommitments.sql'),
   },
   commitments: {
     create:         sql('commitments/create.sql'),
@@ -53,5 +54,13 @@ module.exports = {
     nonChosenPages: sql('commitments/nonChosenPages.sql'),
     deleteByKhatm:  sql('commitments/deleteByKhatm.sql'),
     getRemains:     sql('commitments/getRemains.sql'),
+  },
+  khatm_stat: {
+    create:         sql('khatm_stat/create.sql'),
+    drop:           sql('khatm_stat/drop.sql'),
+  },
+  khatm_user_stat: {
+    create:         sql('khatm_user_stat/create.sql'),
+    drop:           sql('khatm_user_stat/drop.sql'),
   },
 };

@@ -28,6 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 lib.Khatm.pushNotification();
+lib.Khatm.checkKhatmsToClear();
 
 function loadUserFromDatabase(email, token, isTest) {
   return new Promise((resolve, reject) => {

@@ -20,6 +20,8 @@
     "jade": "~1.11.0",
     "jsonwebtoken": "^7.4.0",
     "moment": "^2.18.1",
+    "moment-round": "^1.0.1",
+    "moment-timezone": "^0.5.13",
     "morgan": "~1.7.0",
     "node-schedule": "^1.2.4",
     "nodemailer": "^4.0.1",

@@ -25,13 +25,13 @@ begin
     end if;
 
     for dead_khatm in select * from khatms where end_date < enddate loop
-        insert into khatm_stat
+        insert into khatm_stat(khid, read_pages, all_pages, participants_number)
             select khid, count(case when isread = true then 1 end) as read_pages, count(*) as all_pages, count(distinct uid) as participants_number
             from commitments
             where khid = dead_khatm.khid
             group by khid;
 
-        insert into khatm_user_stat
+        insert into khatm_user_stat(khid, uid, read_pages, unread_pages)
             select khid, uid, count(case when isread = true then 1 end) as read_pages, count(case when isread = false then 1 end) as unread_pages
             from commitments
             where khid = dead_khatm.khid and uid is not null

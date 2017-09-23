@@ -10,6 +10,8 @@ from
   khatms.timezone,
   khatms.specific_sura,
   khatms.repeats,
+  khatms.is_everyday,
+  khatms.page_per_day,
   users.name as owner_name,
   users.email as owner_nmail,
   khatms.share_link,

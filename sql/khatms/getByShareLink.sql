@@ -1,4 +1,6 @@
-select t1.khid, *
+select x.*, y.*
+from
+(select t1.khid as khatm_id, *
 from
 (select
   khatms.khid as khid,
@@ -10,6 +12,8 @@ from
   khatms.timezone,
   khatms.specific_sura,
   khatms.repeats,
+  khatms.is_everyday,
+  khatms.page_per_day,
   users.name as owner_name,
   users.email as owner_email,
   khatms.share_link,
@@ -30,4 +34,10 @@ from users
 join commitments on users.uid = commitments.uid
 join khatms on khatms.khid = commitments.khid
 where lower(users.email) = lower(${email})
-group by khatms.khid) as t2 on t2.k = t1.khid
+group by khatms.khid) as t2 on t2.k = t1.khid) as x
+left outer join
+(select
+    everyday_khatm_join.khid as join_khid
+from everyday_khatm_join
+join users on everyday_khatm_join.uid = users.uid
+where lower(users.email) = lower(${email})) as y on x.khatm_id = y.join_khid

@@ -1,0 +1,1 @@
+drop table everyday_khatm_join;

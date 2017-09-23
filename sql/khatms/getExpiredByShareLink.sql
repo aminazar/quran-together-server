@@ -11,6 +11,8 @@ select
   users.name as owner_name,
   users.email as owner_email,
   khatms.share_link,
+  khatms.is_everyday,
+  khatms.page_per_day,
   khatm_stat.read_pages,
   khatm_stat.participants_number as participatings,
   khatm_user_stat.read_pages as you_read,

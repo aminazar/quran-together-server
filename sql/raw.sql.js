@@ -70,5 +70,6 @@ module.exports = {
     create:         sql('everyday_khatm_join/create.sql'),
     drop:           sql('everyday_khatm_join/drop.sql'),
     putData:        sql('everyday_khatm_join/putData.sql'),
+    getEverydayUser:sql('everyday_khatm_join/getEverydayUsers.sql'),
   },
 };

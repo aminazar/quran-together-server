@@ -2,6 +2,8 @@ select
     khatms.name as khatm_name,
     khatms.end_date,
     khatms.share_link,
+    khatms.is_everyday,
+    khatms.page_per_day,
     users.uid as uid,
     users.email as user_email,
     users.name as user_name,

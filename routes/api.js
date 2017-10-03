@@ -58,6 +58,8 @@ router.put('/user', apiResponse('User', 'confirmation', false, ['body', 'body.em
 router.post('/user/exist', apiResponse('User', 'userExistence', false, ['body.email']));
 router.post('/user/auth', apiResponse('User', 'confirmRegistration', false, ['body.email', 'body.code']));
 router.delete('/user/auth', apiResponse('User', 'deleteAuthLink', true, ['user.email', 'user.token']));
+router.post('/user/socket/get', apiResponse('User', 'assigningSocketNamespace', true, ['user.email']));
+router.post('/user/socket/dismiss', apiResponse('User', 'deleteSocketNamespace', true, ['user.email']));
 
 
 //Khatm API

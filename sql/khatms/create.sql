@@ -15,19 +15,21 @@ CREATE TABLE khatms(
 
 );
 
-create function clear_commitments(enddate date) returns void as $$
+create function clear_commitments(enddate string) returns void as $$
 declare
   dead_khatm_count int;
   dead_khatm record;
+  temp_enddate date;
 begin
-    select count(*) into dead_khatm_count from khatms where end_date < enddate;
+    temp_enddate = to_timestamp(enddate, 'YYYY-MM-DD');
+    select count(*) into dead_khatm_count from khatms where end_date <= temp_enddate;
 
     if (dead_khatm_count > 0) then
     else
         return;
     end if;
 
-    for dead_khatm in select * from khatms where end_date < enddate loop
+    for dead_khatm in select * from khatms where end_date <= temp_enddate loop
         insert into khatm_stat(khid, read_pages, all_pages, participants_number)
             select khid, count(case when isread = true then 1 end) as read_pages, count(*) as all_pages, count(distinct uid) as participants_number
             from commitments
@@ -46,7 +48,7 @@ begin
     where khid in
     (select khid
     from khatms
-    where end_date < enddate);
+    where end_date <= temp_enddate);
 
     return;
 end;

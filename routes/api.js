@@ -67,7 +67,9 @@ router.put('/khatm', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body'
 router.post('/khatm/:khid', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body', 'params.khid']));    //edit a khatm
 router.get('/khatm', apiResponse('Khatm', 'selectAllKhatms', true, ['user.email']));
 router.post('/khatm/commitment/auto', apiResponse('Khatm', 'assigningPage', true, ['user.uid', 'body.khid', 'body.pages']));
+router.get('/khatm/commitment/free/:khid', apiResponse('Khatm', 'getFreePages', true, ['user.uid', 'params.khid']));
 router.post('/khatm/commitment/commit', apiResponse('Khatm', 'commitPages', true, ['body.cids', 'body.isread']));
+router.post('/khatm/commitment/getpage', apiResponse('Khatm', 'selfAssigningPage', true, ['user.uid', 'body.cids', 'body.shouldget']));
 router.get('/khatm/commitment/all', apiResponse('Khatm', 'getAllRemainedCommitments', true, ['user.uid']));
 router.get('/khatm/commitment/:khid', apiResponse('Khatm', 'getRemainCommitments', true, ['user.uid', 'params.khid']));
 router.get('/khatm/link/:link/:is_expired', apiResponse('Khatm', 'getKhatmByLink', true, ['params.link', 'params.is_expired', 'user.email']));

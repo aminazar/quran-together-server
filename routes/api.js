@@ -75,7 +75,8 @@ router.get('/khatm/commitment/:khid', apiResponse('Khatm', 'getRemainCommitments
 router.get('/khatm/link/:link/:is_expired', apiResponse('Khatm', 'getKhatmByLink', true, ['params.link', 'params.is_expired', 'user.email']));
 
 //Push notification API
-router.post('/notification/token', apiResponse('Khatm', 'storeDeviceToken', true, ['body.token', 'user.email']));
+router.post('/notification/token/add', apiResponse('Khatm', 'storeDeviceToken', true, ['body.token', 'user.email']));
+router.post('/notification/token/del', apiResponse('Khatm', 'deleteDeviceToken', true, ['body.token', 'user.email']));
 
 //Profile
 router.get('/profile/person', apiResponse('User', 'getUserProfileData', true, ['user.email']));

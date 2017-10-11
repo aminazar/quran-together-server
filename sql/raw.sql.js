@@ -46,6 +46,7 @@ module.exports = {
     clearDeadKhatmCommitments: sql('khatms/clearDeadKhatmCommitments.sql'),
     getMyCreatedKhatm:      sql('khatms/getMyCreatedKhatm.sql'),
     getMyJoinedKhatm:       sql('khatms/getMyJoinedKhatm.sql'),
+    getById:                sql('Khatms/getById.sql'),
   },
   commitments: {
     create:                 sql('commitments/create.sql'),
@@ -72,5 +73,6 @@ module.exports = {
     drop:           sql('everyday_khatm_join/drop.sql'),
     putData:        sql('everyday_khatm_join/putData.sql'),
     getEverydayUser:sql('everyday_khatm_join/getEverydayUsers.sql'),
+    removeUser:     sql('everyday_khatm_join/removeUser.sql'),
   },
 };

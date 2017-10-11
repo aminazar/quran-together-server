@@ -39,6 +39,17 @@ let get = (key) => {
   })
 };
 
+let remove = (key) => {
+  return new Promise((resolve, reject) => {
+    if(redisIsReady)
+      redis_client.delAsync(key)
+        .then(res => resolve(JSON.parse(res)))
+        .catch(err => reject(err));
+    else
+      reject('Redis is not ready now');
+  });
+};
+
 let expire = (key, time) => {
   if(redisIsReady)
     redis_client.expireAsync(key, time);
@@ -50,5 +61,6 @@ module.exports = {
   redis_client,
   save,
   get,
+  remove,
   expire,
 };

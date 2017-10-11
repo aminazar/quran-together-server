@@ -73,6 +73,7 @@ router.post('/khatm/commitment/getpage', apiResponse('Khatm', 'selfAssigningPage
 router.get('/khatm/commitment/all', apiResponse('Khatm', 'getAllRemainedCommitments', true, ['user.uid']));
 router.get('/khatm/commitment/:khid', apiResponse('Khatm', 'getRemainCommitments', true, ['user.uid', 'params.khid']));
 router.get('/khatm/link/:link/:is_expired', apiResponse('Khatm', 'getKhatmByLink', true, ['params.link', 'params.is_expired', 'user.email']));
+router.post('/khatm/everyday/join', apiResponse('Khatm', 'everydayHandler', true, ['user.uid', 'body.khid', 'body.should_join']));
 
 //Push notification API
 router.post('/notification/token/add', apiResponse('Khatm', 'storeDeviceToken', true, ['body.token', 'user.email']));

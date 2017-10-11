@@ -58,6 +58,8 @@ router.put('/user', apiResponse('User', 'confirmation', false, ['body', 'body.em
 router.post('/user/exist', apiResponse('User', 'userExistence', false, ['body.email']));
 router.post('/user/auth', apiResponse('User', 'confirmRegistration', false, ['body.email', 'body.code']));
 router.delete('/user/auth', apiResponse('User', 'deleteAuthLink', true, ['user.email', 'user.token']));
+router.post('/user/socket/get', apiResponse('User', 'assigningSocketNamespace', true, ['user.email']));
+router.post('/user/socket/dismiss', apiResponse('User', 'deleteSocketNamespace', true, ['user.email']));
 
 
 //Khatm API
@@ -65,8 +67,18 @@ router.put('/khatm', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body'
 router.post('/khatm/:khid', apiResponse('Khatm', 'saveKhatm', true, ['user.uid', 'body', 'params.khid']));    //edit a khatm
 router.get('/khatm', apiResponse('Khatm', 'selectAllKhatms', true, ['user.email']));
 router.post('/khatm/commitment/auto', apiResponse('Khatm', 'assigningPage', true, ['user.uid', 'body.khid', 'body.pages']));
+router.get('/khatm/commitment/free/:khid', apiResponse('Khatm', 'getFreePages', true, ['user.uid', 'params.khid']));
 router.post('/khatm/commitment/commit', apiResponse('Khatm', 'commitPages', true, ['body.cids', 'body.isread']));
+router.post('/khatm/commitment/getpage', apiResponse('Khatm', 'selfAssigningPage', true, ['user.uid', 'body.cids', 'body.shouldget']));
 router.get('/khatm/commitment/all', apiResponse('Khatm', 'getAllRemainedCommitments', true, ['user.uid']));
 router.get('/khatm/commitment/:khid', apiResponse('Khatm', 'getRemainCommitments', true, ['user.uid', 'params.khid']));
-router.get('/khatm/link/:link', apiResponse('Khatm', 'getKhatmByLink', true, ['params.link', 'user.email']));
+router.get('/khatm/link/:link/:is_expired', apiResponse('Khatm', 'getKhatmByLink', true, ['params.link', 'params.is_expired', 'user.email']));
+
+//Push notification API
+router.post('/notification/token', apiResponse('Khatm', 'storeDeviceToken', true, ['body.token', 'user.email']));
+
+//Profile
+router.get('/profile/person', apiResponse('User', 'getUserProfileData', true, ['user.email']));
+router.get('/profile/statistical', apiResponse('Khatm', 'getUserProfileKhatmStat', true, ['user.email']));
+
 module.exports = router;

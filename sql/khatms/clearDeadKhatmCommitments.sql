@@ -1,0 +1,1 @@
+select clear_commitments(enddate := ${end_date});

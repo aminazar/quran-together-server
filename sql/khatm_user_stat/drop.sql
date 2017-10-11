@@ -1,0 +1,1 @@
+drop table khatm_user_stat

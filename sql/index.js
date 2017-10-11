@@ -94,6 +94,30 @@ let tablesWithSqlCreatedByHelpers = [
     delete: true,
     idColumn: 'cid',
   },
+  {
+    name: 'khatm_stat',
+    insert: true,
+    update: true,
+    select: true,
+    delete: true,
+    idColumn: 'khid',
+  },
+  {
+    name: 'khatm_user_stat',
+    insert: true,
+    update: true,
+    select: true,
+    delete: true,
+    idColumn: 'khid',
+  },
+  {
+    name: 'everyday_khatm_join',
+    insert: false,
+    update: true,
+    select: true,
+    delete: true,
+    isColumn: 'khid'
+  }
 ];
 
 tablesWithSqlCreatedByHelpers.forEach((table)=>{

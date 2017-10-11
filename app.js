@@ -6,11 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var bluebird = require('bluebird');
 var env = require('./env');
-var redis = require('redis');
-var redis_client = redis.createClient(env.isProd?process.env.REDIS_URL:{
-  socket_keepalive: true
-});
-
+var redis = require('./redis');
 var api = require('./routes/api');
 var index = require('./routes/index');
 var sql = require('./sql');
@@ -31,39 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
-
-let redisIsReady = false;
-
-redis_client.on('ready', () => {
-  console.log('Redis is ready');
-  redisIsReady = true;
-});
-
-redis_client.on('error', (err) => {
-  console.log('Redis is down. Back to sql check. The error message is ', err);
-  redisIsReady = false;
-});
-
-function getUser(email){
-  if(redisIsReady)
-    return redis_client.getAsync(email);
-  return null;
-};
-
-function setUser(email, user){
-  if(redisIsReady) {
-    redis_client.setAsync(email, user);
-    setExpiration(email);
-  }
-}
-
-function setExpiration(email) {
-  //Set expiration time to 10 minutes later (Each manipulation on user refresh this expiration time)
-  if(redisIsReady)
-    redis_client.expireAsync(email, 600);
-}
+lib.Khatm.scheduledFunctions();
 
 function loadUserFromDatabase(email, token, isTest) {
   return new Promise((resolve, reject) => {
@@ -78,7 +42,8 @@ function loadUserFromDatabase(email, token, isTest) {
           token: res[0].token
         };
 
-        setUser(email, JSON.stringify(user));
+        redis.save(email, user);
+        redis.expire(email, 600);
 
         resolve(user);
       })
@@ -111,13 +76,13 @@ app.use(function (req, res, next) {
         })
     }
     else{
-      getUser(email)
+      redis.get(email)
         .then(user => {
-          user = JSON.parse(user);
           if(user === null){
             loadUserFromDatabase(email, token, lib.helpers.isTestReq(req))
               .then(user => {
-                setUser(email, user);
+                redis.save(email, user);
+                redis.expire(email, 600);
                 req.user = user;
                 next();
               })
@@ -133,7 +98,7 @@ app.use(function (req, res, next) {
                 .send('The email or token doest not acceptable');
             }
             else{
-              setExpiration(email);
+              redis.expire(email, 600);
               req.user = user;
               next();
             }

@@ -35,17 +35,18 @@ function loadUserFromDatabase(email, token, isTest) {
 
     curSql.users.get({email: email, token: token})
       .then((res) => {
-        let user = {
-          uid: res[0].uid,
-          email: res[0].email,
-          name: res[0].name,
-          token: res[0].token
-        };
+        if(res === null || res === undefined || res.length === 0)
+          resolve(null);
+        else{
+          let user = {
+            uid: res[0].uid,
+            email: res[0].email,
+            name: res[0].name,
+            token: res[0].token
+          };
 
-        redis.save(email, user);
-        redis.expire(email, 600);
-
-        resolve(user);
+          resolve(user);
+        }
       })
       .catch((err) => {
         reject(err);

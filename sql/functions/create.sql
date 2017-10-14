@@ -1,4 +1,4 @@
-create or replace function clear_commitments(enddate string) returns void as $$
+create or replace function clear_commitments(enddate varchar(10)) returns void as $$
 declare
   dead_khatm_count int;
   dead_khatm record;

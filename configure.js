@@ -79,11 +79,13 @@ function setupMainDatabase(msg) {
 }
 
 if (env.isDev) {
-  sql.db.create({dbName: env.db_name})
-    .then(res => {
-      setupMainDatabase(res);
-    })
-    .catch(err => {
-      setupMainDatabase(err.message);
-    });
+  setupMainDatabase('Directly');
+
+  // sql.db.create({dbName: env.db_name})
+  //   .then(res => {
+  //     setupMainDatabase(res);
+  //   })
+  //   .catch(err => {
+  //     setupMainDatabase(err.message);
+  //   });
 }

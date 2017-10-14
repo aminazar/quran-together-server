@@ -43,7 +43,7 @@ let remove = (key) => {
   return new Promise((resolve, reject) => {
     if(redisIsReady)
       redis_client.delAsync(key)
-        .then(res => resolve(JSON.parse(res)))
+        .then(res => resolve('Done'))
         .catch(err => reject(err));
     else
       reject('Redis is not ready now');

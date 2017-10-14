@@ -52,6 +52,9 @@ function prodTablesCreate() {
       .then(() => {
         return createOrExist('everyday_khatm_join');
       })
+      .then(() => {
+        return createOrExist('functions');
+      })
       .then(() => resolve())
       .catch((err) => {
         reject(err);

@@ -75,4 +75,7 @@ module.exports = {
     getEverydayUser:sql('everyday_khatm_join/getEverydayUsers.sql'),
     removeUser:     sql('everyday_khatm_join/removeUser.sql'),
   },
+  functions: {
+    create:         sql('functions/create.sql'),
+  },
 };
